@@ -7,6 +7,7 @@ import app.back.springtemplate.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,27 @@ public class UserController {
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user registered sucessfully", 201, userDto);
 
       return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    } catch (Exception e) {
+      ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
+
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+    }
+  }
+
+  /**
+   * Method that connect with service and delete a user account.
+   * User object with email and password @param user
+   * Return a deleted user @return
+   */
+  @DeleteMapping("/delete/user")
+  public ResponseEntity<ResponseDto<UserDto>> deleteUser(@RequestBody User user) {
+    try {
+      User deletedUser = userService.deleteUser(user.getEmail(), user.getPassword());
+      UserDto userDto = new UserDto(deletedUser.getUsername(), deletedUser.getNickname(), deletedUser.getEmail(),
+          deletedUser.getPassword());
+      ResponseDto<UserDto> res = new ResponseDto<UserDto>("user deleted sucessfully", 200, userDto);
+
+      return ResponseEntity.status(HttpStatus.OK).body(res);
     } catch (Exception e) {
       ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
 

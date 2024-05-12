@@ -48,7 +48,7 @@ public class UserService {
       throw new ExceptionGeneric("user not found.");
     }
 
-    if (optionalUser.get().getPassword() != password) {
+    if (!optionalUser.get().getPassword().equals(password)) {
       throw new ExceptionGeneric("bad credentials");
     }
 

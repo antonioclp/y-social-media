@@ -1,7 +1,7 @@
 package app.back.springtemplate.errors;
 
-public class ExceptionNotFound extends Exception {
-  public ExceptionNotFound(String error) {
+public class ExceptionGeneric extends Exception {
+  public ExceptionGeneric(String error) {
     super(error);
   }
 }
