@@ -1,0 +1,48 @@
+package app.back.springtemplate.controllers;
+
+import app.back.springtemplate.controllers.dtos.ResponseDto;
+import app.back.springtemplate.controllers.dtos.UserDto;
+import app.back.springtemplate.models.entity.User;
+import app.back.springtemplate.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * User controller.
+ */
+@RestController
+@RequestMapping("/")
+public class UserController {
+  private final UserService userService;
+
+  @Autowired
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
+
+  /**
+   * Method that connect with service and register a new user.
+   * Request body user object @param user
+   * Return a response entity @return
+   */
+  @PostMapping("/register/user")
+  public ResponseEntity<ResponseDto<UserDto>> createUser(@RequestBody User user) {
+    try {
+      User newUser = userService.createUser(user);
+      UserDto userDto = new UserDto(newUser.getUsername(), newUser.getNickname(), newUser.getEmail(),
+          newUser.getPassword());
+      ResponseDto<UserDto> res = new ResponseDto<UserDto>("user registered sucessfully", 201, userDto);
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    } catch (Exception e) {
+      ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
+
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+    }
+  }
+}

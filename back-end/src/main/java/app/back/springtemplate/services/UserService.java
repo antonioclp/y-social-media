@@ -16,13 +16,20 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public void createUser(User newUser) throws ExceptionNotFound {
+  /**
+   * Method that create and return a new user.
+   * New user object @param newUser
+   * Return a new user object @return
+   * 
+   * @throws ExceptionNotFound
+   */
+  public User createUser(User newUser) throws ExceptionNotFound {
     Optional<User> user = userRepository.findUserByEmail(newUser.getEmail());
 
     if (user.isPresent()) {
       throw new ExceptionNotFound("email already registered.");
     }
 
-    userRepository.save(newUser);
+    return userRepository.save(newUser);
   }
 }
