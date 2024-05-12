@@ -1,13 +1,17 @@
 package app.back.springtemplate.controllers;
 
+import app.back.springtemplate.controllers.dtos.ReadUserDto;
 import app.back.springtemplate.controllers.dtos.ResponseDto;
 import app.back.springtemplate.controllers.dtos.UserDto;
 import app.back.springtemplate.models.entity.User;
 import app.back.springtemplate.services.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +48,24 @@ public class UserController {
       ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
 
       return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+    }
+  }
+
+  @GetMapping("/users")
+  public ResponseEntity<ResponseDto<List<ReadUserDto>>> readAllUsers() {
+    try {
+      List<User> users = userService.readAllUsers();
+      List<ReadUserDto> readUsersDto = users.stream().map(u -> new ReadUserDto(u.getUsername(), u.getNickname()))
+          .collect(Collectors.toList());
+
+      ResponseDto<List<ReadUserDto>> res = new ResponseDto<List<ReadUserDto>>("all users founded sucessfully.", 200,
+          readUsersDto);
+
+      return ResponseEntity.status(HttpStatus.OK).body(res);
+    } catch (Exception e) {
+      ResponseDto<List<ReadUserDto>> res = new ResponseDto<List<ReadUserDto>>(e.getMessage(), 404, null);
+
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
   }
 

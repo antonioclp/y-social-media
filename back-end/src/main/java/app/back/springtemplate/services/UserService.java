@@ -3,6 +3,7 @@ package app.back.springtemplate.services;
 import app.back.springtemplate.errors.ExceptionGeneric;
 import app.back.springtemplate.models.entity.User;
 import app.back.springtemplate.models.repositories.UserRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,22 @@ public class UserService {
     }
 
     return userRepository.save(newUser);
+  }
+
+  /**
+   * Method that find all registered users.
+   * Return a list of users @return
+   * 
+   * @throws ExceptionGeneric
+   */
+  public List<User> readAllUsers() throws ExceptionGeneric {
+    List<User> users = userRepository.findAll();
+
+    if (users.isEmpty()) {
+      throw new ExceptionGeneric("no registered users.");
+    }
+
+    return users;
   }
 
   /**
