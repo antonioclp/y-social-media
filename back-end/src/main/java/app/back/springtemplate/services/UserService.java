@@ -1,6 +1,6 @@
 package app.back.springtemplate.services;
 
-import app.back.springtemplate.errors.ExceptionNotFound;
+import app.back.springtemplate.errors.ExceptionGeneric;
 import app.back.springtemplate.models.entity.User;
 import app.back.springtemplate.models.repositories.UserRepository;
 import java.util.Optional;
@@ -21,15 +21,40 @@ public class UserService {
    * New user object @param newUser
    * Return a new user object @return
    * 
-   * @throws ExceptionNotFound
+   * @throws ExceptionGeneric
    */
-  public User createUser(User newUser) throws ExceptionNotFound {
-    Optional<User> user = userRepository.findUserByEmail(newUser.getEmail());
+  public User createUser(User newUser) throws ExceptionGeneric {
+    Optional<User> optionalUser = userRepository.findUserByEmail(newUser.getEmail());
 
-    if (user.isPresent()) {
-      throw new ExceptionNotFound("email already registered.");
+    if (optionalUser.isPresent()) {
+      throw new ExceptionGeneric("email already registered.");
     }
 
     return userRepository.save(newUser);
+  }
+
+  /**
+   * Method that delete a user account.
+   * User email @param email
+   * User password @param password
+   * Deleted user @return
+   * 
+   * @throws ExceptionGeneric
+   */
+  public User deleteUser(String email, String password) throws ExceptionGeneric {
+    Optional<User> optionalUser = userRepository.findUserByEmail(email);
+
+    if (!optionalUser.isPresent()) {
+      throw new ExceptionGeneric("user not found.");
+    }
+
+    if (optionalUser.get().getPassword() != password) {
+      throw new ExceptionGeneric("bad credentials");
+    }
+
+    User user = optionalUser.get();
+    userRepository.delete(user);
+
+    return user;
   }
 }
