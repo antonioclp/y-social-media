@@ -51,6 +51,40 @@ public class UserService {
   }
 
   /**
+   * Method that update a existing user.
+   * User email @param email
+   * User nickname @param nickname
+   * Username @param username
+   * User password @param password
+   * Updated user @return
+   * 
+   * @throws ExceptionGeneric
+   */
+  public User updateUser(String email, String nickname, String username, String password) throws ExceptionGeneric {
+    Optional<User> optionalUser = userRepository.findUserByEmail(email);
+
+    if (!optionalUser.isPresent()) {
+      throw new ExceptionGeneric("user not found.");
+    }
+
+    User user = optionalUser.get();
+
+    if (!password.equals(user.getPassword())) {
+      throw new ExceptionGeneric("bad credentials");
+    }
+
+    if (nickname != null && !nickname.isBlank()) {
+      user.setNickname(nickname);
+    }
+
+    if (username != null && !username.isBlank()) {
+      user.setUsername(username);
+    }
+
+    return userRepository.save(user);
+  }
+
+  /**
    * Method that delete a user account.
    * User email @param email
    * User password @param password

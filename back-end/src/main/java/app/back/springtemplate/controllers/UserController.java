@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,21 +44,24 @@ public class UserController {
           newUser.getPassword());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user registered sucessfully", 201, userDto);
 
-      return ResponseEntity.status(HttpStatus.CREATED).body(res);
+      return ResponseEntity.status(res.status()).body(res);
     } catch (Exception e) {
       ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
 
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+      return ResponseEntity.status(res.status()).body(res);
     }
   }
 
+  /**
+   * Method that connect with service and read all users registered.
+   * Return a list of all users @return
+   */
   @GetMapping("/users")
   public ResponseEntity<ResponseDto<List<ReadUserDto>>> readAllUsers() {
     try {
       List<User> users = userService.readAllUsers();
       List<ReadUserDto> readUsersDto = users.stream().map(u -> new ReadUserDto(u.getUsername(), u.getNickname()))
           .collect(Collectors.toList());
-
       ResponseDto<List<ReadUserDto>> res = new ResponseDto<List<ReadUserDto>>("all users founded sucessfully.", 200,
           readUsersDto);
 
@@ -65,7 +69,28 @@ public class UserController {
     } catch (Exception e) {
       ResponseDto<List<ReadUserDto>> res = new ResponseDto<List<ReadUserDto>>(e.getMessage(), 404, null);
 
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+      return ResponseEntity.status(res.status()).body(res);
+    }
+  }
+
+  /**
+   * Method that conect with service and update a user.
+   * User object @param user
+   * Return the informations updated @return
+   */
+  @PutMapping("/update/user")
+  public ResponseEntity<ResponseDto<ReadUserDto>> updateUser(@RequestBody User user) {
+    try {
+      User updatedUser = userService.updateUser(user.getEmail(), user.getNickname(), user.getUsername(),
+          user.getPassword());
+      ReadUserDto readUserDto = new ReadUserDto(updatedUser.getUsername(), updatedUser.getNickname());
+      ResponseDto<ReadUserDto> res = new ResponseDto<ReadUserDto>("updated sucessfully.", 200, readUserDto);
+
+      return ResponseEntity.status(res.status()).body(res);
+    } catch (Exception e) {
+      ResponseDto<ReadUserDto> res = new ResponseDto<ReadUserDto>(e.getMessage(), 409, null);
+
+      return ResponseEntity.status(res.status()).body(res);
     }
   }
 
@@ -82,11 +107,11 @@ public class UserController {
           deletedUser.getPassword());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user deleted sucessfully", 200, userDto);
 
-      return ResponseEntity.status(HttpStatus.OK).body(res);
+      return ResponseEntity.status(res.status()).body(res);
     } catch (Exception e) {
       ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
 
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+      return ResponseEntity.status(res.status()).body(res);
     }
   }
 }
