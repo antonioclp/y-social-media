@@ -35,6 +35,25 @@ public class UserService {
   }
 
   /**
+   * Method that return a user informations by email.
+   * User email @param email
+   * User object by email @return
+   * 
+   * @throws ExceptionGeneric
+   */
+  public User readUser(String email) throws ExceptionGeneric {
+    Optional<User> optionalUser = userRepository.findUserByEmail(email);
+
+    if (!optionalUser.isPresent()) {
+      throw new ExceptionGeneric("user not found.");
+    }
+
+    User userByEmail = optionalUser.get();
+
+    return userByEmail;
+  }
+
+  /**
    * Method that find all registered users.
    * Return a list of users @return
    * 
