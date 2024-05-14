@@ -1,17 +1,28 @@
-import { cookies } from "next/headers";
+"use client";
+
+import { useState } from "react";
 import { fetchLogin } from "../utils/api";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import Cookies from "js-cookie";
 
-export default async function Login() {
+export default function Login() {
+  const [error, setError] = useState(false);
+
   const formAction = async (form: FormData) => {
-    "use server";
-
     const email = form.get("email-input") as string;
     const password = form.get("password-input") as string;
 
     const obj = await fetchLogin(email, password);
 
-    cookies().set("dXNy", JSON.stringify(obj.data));
+    if (obj.status !== 200) {
+      setError(true);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      setError(false);
+      return;
+    }
+
+    Cookies.set("dXNy", JSON.stringify(obj.data));
     redirect("/");
   };
 
@@ -26,6 +37,11 @@ export default async function Login() {
           <span>Password</span>
           <input type="password" id="password-input" name="password-input" />
         </label>
+        {error && <span>Email or password are incorrect</span>}
+        <span>
+          {"Don't have account? Try "}
+          <Link href="/register">register</Link>
+        </span>
         <button type="submit">Login</button>
       </form>
     </main>
