@@ -12,7 +12,7 @@ export const passwordValidation = (password: string): boolean => {
 
 export const genericValidation = (username: string, nickname: string) => {
   const regex = /^[a-z]+$/;
-  const min = 6;
+  const min = 4;
 
   const validation = username.length >= min && nickname.length >= min && regex.test(nickname);
 

@@ -16,5 +16,6 @@ export interface IRegister {
   password: string;
   nickname: string;
   username: string;
+  birthday: string;
   confirmPassword: string;
 }

@@ -15,25 +15,30 @@ export default function Register() {
     nickname: "",
     username: "",
     password: "",
+    birthday: "",
     confirmPassword: "",
   });
   const [isDisable, setIsDisable] = useState<boolean>(true);
   const [errPassword, setErrPassword] = useState<boolean>(false);
 
   useEffect(() => {
-    const { email, password, nickname, username, confirmPassword } = usr;
+    const { email, password, nickname, username, birthday, confirmPassword } =
+      usr;
 
     if (
       !emailValidation(email) ||
       !passwordValidation(password) ||
-      !genericValidation(username, nickname)
+      !genericValidation(username, nickname) ||
+      !birthday
     ) {
       setIsDisable(true);
       return;
     }
 
     if (confirmPassword !== password) {
+      setIsDisable(true);
       setErrPassword(true);
+      return;
     }
 
     setIsDisable(false);
@@ -107,6 +112,13 @@ export default function Register() {
             type="date"
             id="birthday-input"
             name="birthday"
+            min="1924-01-01"
+            max={`${new Date().getFullYear()}-${String(
+              new Date().getMonth() + 1
+            ).padStart(2, "0")}-${String(new Date().getDate()).padStart(
+              2,
+              "0"
+            )}`}
             onChange={onChange}
           />
         </label>
