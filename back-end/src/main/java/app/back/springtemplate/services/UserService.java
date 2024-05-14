@@ -50,7 +50,7 @@ public class UserService {
 
     User userByEmail = optionalUser.get();
 
-    if (!userByEmail.getPassword().equals(password)) {
+    if (!password.equals(userByEmail.getPassword())) {
       throw new ExceptionGeneric("bad credentials");
     }
 

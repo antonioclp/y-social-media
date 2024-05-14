@@ -58,10 +58,10 @@ public class UserController {
    * User email @param email
    * Return a user object @return
    */
-  @GetMapping("/users/{email}")
-  public ResponseEntity<ResponseDto<UserDto>> readUser(@PathVariable String email, @RequestBody String password) {
+  @PostMapping("/users/{email}")
+  public ResponseEntity<ResponseDto<UserDto>> readUser(@PathVariable String email, @RequestBody User user) {
     try {
-      User userByEmail = userService.readUser(email, password);
+      User userByEmail = userService.readUser(email, user.getPassword());
       UserDto userDto = new UserDto(userByEmail.getUsername(), userByEmail.getNickname(), userByEmail.getEmail(),
           userByEmail.getPassword());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user founded sucessfully.", 200, userDto);

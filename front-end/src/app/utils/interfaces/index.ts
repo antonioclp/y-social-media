@@ -5,8 +5,8 @@ export interface IUser {
   username: string;
 }
 
-export interface IFetchLogin {
+export interface ILoginResponse {
   message: string;
   status: number;
-  data: IUser;
+  data: IUser | null;
 }
