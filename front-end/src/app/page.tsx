@@ -1,11 +1,13 @@
+"use client";
+
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
 /**
  * Front-end branch.
  */
 export default function Home() {
-  if (!cookies().get("dXNy")) {
+  if (!Cookies.get("dXNy")) {
     redirect("/login");
   }
 

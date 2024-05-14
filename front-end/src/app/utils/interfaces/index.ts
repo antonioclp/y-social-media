@@ -10,3 +10,11 @@ export interface ILoginResponse {
   status: number;
   data: IUser | null;
 }
+
+export interface IRegister {
+  email: string;
+  password: string;
+  nickname: string;
+  username: string;
+  confirmPassword: string;
+}
