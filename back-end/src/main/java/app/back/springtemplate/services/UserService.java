@@ -41,7 +41,7 @@ public class UserService {
    * 
    * @throws ExceptionGeneric
    */
-  public User readUser(String email) throws ExceptionGeneric {
+  public User readUser(String email, String password) throws ExceptionGeneric {
     Optional<User> optionalUser = userRepository.findUserByEmail(email);
 
     if (!optionalUser.isPresent()) {
@@ -49,6 +49,10 @@ public class UserService {
     }
 
     User userByEmail = optionalUser.get();
+
+    if (!userByEmail.getPassword().equals(password)) {
+      throw new ExceptionGeneric("bad credentials");
+    }
 
     return userByEmail;
   }

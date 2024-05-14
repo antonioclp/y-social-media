@@ -59,18 +59,24 @@ public class UserController {
    * Return a user object @return
    */
   @GetMapping("/users/{email}")
-  public ResponseEntity<ResponseDto<UserDto>> readUser(@PathVariable String email) {
+  public ResponseEntity<ResponseDto<UserDto>> readUser(@PathVariable String email, @RequestBody String password) {
     try {
-      User userByEmail = userService.readUser(email);
+      User userByEmail = userService.readUser(email, password);
       UserDto userDto = new UserDto(userByEmail.getUsername(), userByEmail.getNickname(), userByEmail.getEmail(),
           userByEmail.getPassword());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user founded sucessfully.", 200, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
     } catch (Exception e) {
-      ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 404, null);
+      if (e.getMessage().equals("user not found.")) {
+        ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 404, null);
 
-      return ResponseEntity.status(res.status()).body(res);
+        return ResponseEntity.status(res.status()).body(res);
+      } else {
+        ResponseDto<UserDto> res = new ResponseDto<UserDto>(e.getMessage(), 409, null);
+
+        return ResponseEntity.status(res.status()).body(res);
+      }
     }
   }
 
