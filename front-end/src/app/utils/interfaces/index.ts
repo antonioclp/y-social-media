@@ -19,3 +19,8 @@ export interface IRegister {
   birthday: string;
   confirmPassword: string;
 }
+
+export interface IErrors {
+  activate: boolean;
+  message: string;
+}

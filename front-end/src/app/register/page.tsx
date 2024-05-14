@@ -1,12 +1,19 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+
+// Validations
 import {
   emailValidation,
   genericValidation,
+  nicknameValidation,
   passwordValidation,
 } from "../utils/validations";
-import { IRegister, IUser } from "../utils/interfaces";
+
+// Interfaces
+import { IErrors, IRegister } from "../utils/interfaces";
+
+// Fetch
 import { fetchLogin } from "../utils/api";
 
 export default function Register() {
@@ -19,33 +26,93 @@ export default function Register() {
     confirmPassword: "",
   });
   const [isDisable, setIsDisable] = useState<boolean>(true);
-  const [errPassword, setErrPassword] = useState<boolean>(false);
+  const [errorsMsg, setErrorsMsg] = useState<IErrors>({
+    activate: false,
+    message: "",
+  });
 
   useEffect(() => {
-    const { email, password, nickname, username, birthday, confirmPassword } =
-      usr;
+    const { email, password, nickname, username, birthday } = usr;
 
-    if (
-      !emailValidation(email) ||
-      !passwordValidation(password) ||
-      !genericValidation(username, nickname) ||
-      !birthday
-    ) {
+    if (!genericValidation(email, username, nickname, password) || !birthday) {
       setIsDisable(true);
+      return;
+    }
+
+    setIsDisable(false);
+  }, [usr]);
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const { email, password, nickname, confirmPassword } = usr;
+
+    if (!emailValidation(email)) {
+      setErrorsMsg({
+        activate: true,
+        message: "Insert a valid email.",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    if (!passwordValidation(password)) {
+      setErrorsMsg({
+        activate: true,
+        message:
+          "Password must contain at least one number and one special character.",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    if (!nicknameValidation(nickname)) {
+      setErrorsMsg({
+        activate: true,
+        message: "Nickname can only contain lowercase letters.",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
       return;
     }
 
     if (confirmPassword !== password) {
       setIsDisable(true);
-      setErrPassword(true);
+      setErrorsMsg({
+        activate: true,
+        message: "Passwords must be the same.",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
       return;
     }
-
-    setIsDisable(false);
-    setErrPassword(false);
-  }, [usr]);
-
-  const onSubmit = () => {};
+  };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {
@@ -60,7 +127,7 @@ export default function Register() {
 
   return (
     <main>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => onSubmit(e)} method="POST">
         <label>
           <span>Email</span>
           <input
@@ -122,6 +189,7 @@ export default function Register() {
             onChange={onChange}
           />
         </label>
+        {errorsMsg.activate && <span>{errorsMsg.message}</span>}
         <button type="submit" disabled={isDisable}>
           Register
         </button>

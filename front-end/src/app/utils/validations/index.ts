@@ -10,11 +10,25 @@ export const passwordValidation = (password: string): boolean => {
   return regex.test(password);
 };
 
-export const genericValidation = (username: string, nickname: string) => {
+export const nicknameValidation = (nickname: string): boolean => {
   const regex = /^[a-z]+$/;
+
+  return regex.test(nickname);
+};
+
+export const genericValidation = (
+  email: string,
+  username: string,
+  nickname: string,
+  password: string
+) => {
   const min = 4;
 
-  const validation = username.length >= min && nickname.length >= min && regex.test(nickname);
+  const validation =
+    email.length >= min &&
+    username.length >= min &&
+    nickname.length >= min &&
+    password.length >= min;
 
   return validation;
-}
+};
