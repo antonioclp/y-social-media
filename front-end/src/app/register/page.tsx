@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Validations
 import {
@@ -14,9 +15,11 @@ import {
 import { IErrors, IRegister } from "../utils/interfaces";
 
 // Fetch
-import { fetchLogin } from "../utils/api";
+import { fetchRegister } from "../utils/api";
 
 export default function Register() {
+  const router = useRouter();
+
   const [usr, setUsr] = useState<IRegister>({
     email: "",
     nickname: "",
@@ -42,7 +45,7 @@ export default function Register() {
     setIsDisable(false);
   }, [usr]);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const { email, password, nickname, confirmPassword } = usr;
@@ -112,6 +115,26 @@ export default function Register() {
 
       return;
     }
+
+    const obj = await fetchRegister(usr);
+
+    if (obj.status !== 201) {
+      setErrorsMsg({
+        activate: true,
+        message: "Email or nickname already registered",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    router.push("/login");
   };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {

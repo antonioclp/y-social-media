@@ -5,7 +5,7 @@ export interface IUser {
   username: string;
 }
 
-export interface ILoginResponse {
+export interface IGenericResponse {
   message: string;
   status: number;
   data: IUser | null;
