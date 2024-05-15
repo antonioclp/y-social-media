@@ -11,7 +11,7 @@ export interface IGenericResponse {
   data: IUser | null;
 }
 
-export interface IRegister {
+export interface IRegisterForm {
   email: string;
   password: string;
   nickname: string;

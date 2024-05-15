@@ -12,7 +12,7 @@ import {
 } from "../utils/validations";
 
 // Interfaces
-import { IErrors, IRegister } from "../utils/interfaces";
+import { IErrors, IRegisterForm } from "../utils/interfaces";
 
 // Fetch
 import { fetchRegister } from "../utils/api";
@@ -20,7 +20,19 @@ import { fetchRegister } from "../utils/api";
 export default function Register() {
   const router = useRouter();
 
-  const [usr, setUsr] = useState<IRegister>({
+  const maxDate = new Date();
+  const minDate = new Date();
+  minDate.setFullYear(maxDate.getFullYear() - 100);
+
+  const maxDateString = `${maxDate.getFullYear()}-${String(
+    maxDate.getMonth() + 1
+  ).padStart(2, "0")}-${String(maxDate.getDate()).padStart(2, "0")}`;
+
+  const minDateString = `${minDate.getFullYear()}-${String(
+    minDate.getMonth() + 1
+  ).padStart(2, "0")}-${String(minDate.getDate()).padStart(2, "0")}`;
+
+  const [usr, setUsr] = useState<IRegisterForm>({
     email: "",
     nickname: "",
     username: "",
@@ -48,7 +60,7 @@ export default function Register() {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const { email, password, nickname, confirmPassword } = usr;
+    const { email, password, nickname, confirmPassword, birthday } = usr;
 
     if (!emailValidation(email)) {
       setErrorsMsg({
@@ -104,6 +116,23 @@ export default function Register() {
       setErrorsMsg({
         activate: true,
         message: "Passwords must be the same.",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    if (2024 - Number(birthday.split("-")[0]) <= 14) {
+      setIsDisable(true);
+      setErrorsMsg({
+        activate: true,
+        message: "Invalid age",
       });
 
       setTimeout(() => {
@@ -202,13 +231,8 @@ export default function Register() {
             type="date"
             id="birthday-input"
             name="birthday"
-            min="1924-01-01"
-            max={`${new Date().getFullYear()}-${String(
-              new Date().getMonth() + 1
-            ).padStart(2, "0")}-${String(new Date().getDate()).padStart(
-              2,
-              "0"
-            )}`}
+            min={minDateString}
+            max={`${maxDateString}`}
             onChange={onChange}
           />
         </label>
