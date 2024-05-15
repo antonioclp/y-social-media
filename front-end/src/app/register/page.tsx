@@ -79,6 +79,7 @@ export default function Register() {
     }
 
     if (!passwordValidation(password)) {
+      console.log(password);
       setErrorsMsg({
         activate: true,
         message:

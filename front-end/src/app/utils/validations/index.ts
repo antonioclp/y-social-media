@@ -5,13 +5,13 @@ export const emailValidation = (email: string): boolean => {
 };
 
 export const passwordValidation = (password: string): boolean => {
-  const regex = /^(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+  const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]+$/;
 
   return regex.test(password);
 };
 
 export const nicknameValidation = (nickname: string): boolean => {
-  const regex = /^[a-z]+$/;
+  const regex = /^[a-zA-Z]+(?:[.-]?[a-zA-Z]+)*$/;
 
   return regex.test(nickname);
 };

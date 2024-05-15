@@ -1,4 +1,4 @@
-import { IGenericResponse, IRegister } from "../interfaces";
+import { IGenericResponse, IRegisterForm } from "../interfaces";
 
 export const fetchLogin = async (
   email: string,
@@ -40,7 +40,7 @@ export const fetchLogin = async (
 };
 
 export const fetchRegister = async (
-  usr: IRegister
+  usr: IRegisterForm
 ): Promise<IGenericResponse> => {
   let status: number = 0;
 
