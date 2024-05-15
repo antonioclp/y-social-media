@@ -60,7 +60,7 @@ export const fetchRegister = async (
         username,
         nickname,
         password,
-        age: 2024 - Number(birthday.split("-")[0]),
+        age: new Date().getFullYear() - Number(birthday.split("-")[0]),
       }),
     });
 

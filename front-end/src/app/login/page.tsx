@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { fetchLogin } from "../utils/api";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
+
+// Fetch
+import { fetchLogin } from "../utils/api";
 
 export default function Login() {
   const [error, setError] = useState(false);
