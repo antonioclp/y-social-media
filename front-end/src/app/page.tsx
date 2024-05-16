@@ -3,6 +3,11 @@
 import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
 
+// Components
+import { CardFetchPost, CardFetchUsersPost } from "./utils/components/Cards";
+import { Header } from "./utils/components/Header";
+import { Recommendations } from "./utils/components/Asides";
+
 /**
  * Front-end branch.
  */
@@ -13,7 +18,14 @@ export default function Home() {
 
   return (
     <main>
-      <span>Nextjs</span>
+      <Header />
+      <section>
+        <CardFetchPost />
+      </section>
+      <section>
+        <CardFetchUsersPost />
+      </section>
+      <Recommendations />
     </main>
   );
 }
