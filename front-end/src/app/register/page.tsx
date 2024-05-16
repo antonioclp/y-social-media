@@ -17,6 +17,10 @@ import { IErrors, IRegisterForm } from "../utils/interfaces";
 // Fetch
 import { fetchRegister } from "../utils/api";
 
+// Style
+import "@/styles/pages/register.css";
+import Image from "next/image";
+
 export default function Register() {
   const router = useRouter();
 
@@ -179,8 +183,15 @@ export default function Register() {
   };
 
   return (
-    <main>
-      <form onSubmit={(e) => onSubmit(e)} method="POST">
+    <main className="rgs-m">
+      <form onSubmit={(e) => onSubmit(e)} method="POST" className="rgs-m--form">
+        <Image
+          src="/icons/y-logo.png"
+          alt="y"
+          width={100}
+          height={100}
+          priority
+        />
         <label>
           <span>Email</span>
           <input
@@ -237,10 +248,16 @@ export default function Register() {
             onChange={onChange}
           />
         </label>
-        {errorsMsg.activate && <span>{errorsMsg.message}</span>}
-        <button type="submit" disabled={isDisable}>
-          Register
-        </button>
+        <section>
+          {errorsMsg.activate ? (
+            <span id="rgs-m--form_err">{errorsMsg.message}</span>
+          ) : (
+            <span>Register your own account</span>
+          )}
+          <button type="submit" disabled={isDisable}>
+            Confirm
+          </button>
+        </section>
       </form>
     </main>
   );

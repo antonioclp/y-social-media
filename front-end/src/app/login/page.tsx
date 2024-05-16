@@ -1,10 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { fetchLogin } from "../utils/api";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
+
+// Fetch
+import { fetchLogin } from "../utils/api";
+import Image from "next/image";
+
+// Style
+import "@/styles/pages/login.css";
 
 export default function Login() {
   const [error, setError] = useState(false);
@@ -27,8 +33,15 @@ export default function Login() {
   };
 
   return (
-    <main>
-      <form action={formAction}>
+    <main className="lgn-m">
+      <form action={formAction} className="lgn-m--form">
+        <Image
+          src="/icons/y-logo.png"
+          alt="y"
+          width={100}
+          height={100}
+          priority
+        />
         <label htmlFor="password-input">
           <span>Email</span>
           <input type="text" id="email-input" name="email-input" />
@@ -37,12 +50,18 @@ export default function Login() {
           <span>Password</span>
           <input type="password" id="password-input" name="password-input" />
         </label>
-        {error && <span>Email or password are incorrect</span>}
-        <span>
-          {"Don't have account? Try "}
-          <Link href="/register">register</Link>
-        </span>
-        <button type="submit">Login</button>
+        <section>
+          {error ? (
+            <span id="lgn-m--form_err">Email or password are incorrect</span>
+          ) : (
+            <span>Connect and see the world</span>
+          )}
+          <span>
+            {"Don't have account? Try "}
+            <Link href="/register">register</Link>
+          </span>
+          <button type="submit">Login</button>
+        </section>
       </form>
     </main>
   );
