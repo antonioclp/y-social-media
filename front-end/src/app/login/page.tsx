@@ -13,7 +13,7 @@ import Image from "next/image";
 import "@/styles/pages/login.css";
 
 export default function Login() {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<boolean>(false);
 
   const formAction = async (form: FormData) => {
     const email = form.get("email-input") as string;
