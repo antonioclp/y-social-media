@@ -27,7 +27,7 @@ export interface IGenericFetch {
   method: string;
 }
 
-export interface ICreatePostFetch {
+export interface IPostsFetch {
   message: string;
   createdDate: string;
   createdTime: string;
@@ -37,5 +37,5 @@ export interface ICreatePostFetch {
 export interface IGenericResponse {
   message: string;
   status: number;
-  data: IUser | ICreatePostFetch | null;
+  data: IUser | IPostsFetch | null;
 }

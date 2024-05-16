@@ -1,5 +1,8 @@
 import { ChangeEvent } from "react";
 
+// Interfaces
+import { IPostsFetch } from "../interfaces";
+
 export const CardFetchPost = ({
   onChange,
   onClick,
@@ -28,10 +31,19 @@ export const CardFetchPost = ({
   );
 };
 
-export const CardFetchUsersPost = () => {
+export const CardFetchUsersPost = ({
+  message,
+  createdDate,
+  createdTime,
+  user,
+}: IPostsFetch) => {
   return (
     <article>
-      <section>CardFetchUsersPost</section>
+      <section>{user.username}</section>
+      <section>{user.nickname}</section>
+      <section>{message}</section>
+      <section>{createdDate}</section>
+      <section>{createdTime}</section>
     </article>
   );
 };

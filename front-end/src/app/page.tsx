@@ -10,13 +10,19 @@ import { Header } from "./utils/components/Header";
 import { Recommendations } from "./utils/components/Asides";
 
 // Interfaces
-import { ICreatePostFetch, IErrors, IUser } from "./utils/interfaces";
+import {
+  IErrors,
+  IGenericResponse,
+  IPostsFetch,
+  IUser,
+} from "./utils/interfaces";
 import { genericFetch } from "./utils/api";
 
 /**
  * Front-end branch.
  */
 export default function Home() {
+  const [posts, setPosts] = useState<IPostsFetch[]>([]);
   const [usrEmail, setUsrEmail] = useState<string>();
   const [postMsg, setPostMsg] = useState<string>("");
   const [errorsMsg, setErrorsMsg] = useState<IErrors>({
@@ -29,13 +35,45 @@ export default function Home() {
     if (!Cookies.get("dXNy")) {
       redirect("/login");
     }
+
     const obj: IUser = JSON.parse(Cookies.get("dXNy") || "{}");
 
     if (!obj.email) {
       redirect("/login");
     }
 
+    const fetchPosts = async () => {
+      const objs: IGenericResponse = await genericFetch({
+        option: "read-all-posts",
+        endpoint: "posts",
+        method: "GET",
+      });
+
+      const { data }: IGenericResponse = objs;
+
+      if (Array.isArray(data)) {
+        const posts: IPostsFetch[] = data;
+        const sortedPosts = posts.sort((postA, postB) => {
+          const dateComparison = postB.createdDate.localeCompare(
+            postA.createdDate
+          );
+
+          if (dateComparison === 0) {
+            return postB.createdTime.localeCompare(postA.createdTime);
+          }
+
+          return dateComparison;
+        });
+
+        setPosts(sortedPosts);
+        return;
+      }
+
+      setPosts([]);
+    };
+
     setUsrEmail(obj.email);
+    fetchPosts();
   }, []);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +106,7 @@ export default function Home() {
   };
 
   const onClick = async () => {
-    const postInfo: ICreatePostFetch = {
+    const postInfo: IPostsFetch = {
       message: postMsg,
       createdDate: new Date().toISOString().split("T")[0],
       createdTime: new Date().toISOString().split("T")[1].split(".")[0],
@@ -126,9 +164,20 @@ export default function Home() {
           <span>Send your message</span>
         )}
       </section>
-      <section>
-        <CardFetchUsersPost />
-      </section>
+      {posts.length >= 1
+        ? posts.map((p, index) => {
+            return (
+              <section key={index}>
+                <CardFetchUsersPost
+                  message={p.message}
+                  createdDate={p.createdDate}
+                  createdTime={p.createdTime}
+                  user={p.user}
+                />
+              </section>
+            );
+          })
+        : null}
       <Recommendations />
     </main>
   );

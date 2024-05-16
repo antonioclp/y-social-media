@@ -1,7 +1,7 @@
 import {
-  ICreatePostFetch,
   IGenericFetch,
   IGenericResponse,
+  IPostsFetch,
   IRegisterForm,
 } from "../interfaces";
 
@@ -53,6 +53,8 @@ export const fetchRegister = async (
   try {
     const url = "http://localhost:8080/register/user";
 
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const { email, username, nickname, password, birthday } = usr;
 
     const response = await fetch(url, {
@@ -89,16 +91,18 @@ export const fetchRegister = async (
 
 export const genericFetch = async (
   fetchObj: IGenericFetch,
-  postObj: ICreatePostFetch
-) => {
+  postObj?: IPostsFetch
+): Promise<IGenericResponse> => {
   let status: number = 0;
 
   try {
     const { option, endpoint, method } = fetchObj;
 
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const url = `http://localhost:8080/${endpoint}`;
 
-    if (option === "create-post") {
+    if (option === "create-post" && postObj) {
       const { message, createdDate, createdTime, user } = postObj;
       const { email } = user;
 
@@ -134,7 +138,7 @@ export const genericFetch = async (
         cache: "no-cache",
       });
 
-      const obj = await response.json();
+      const obj: IGenericResponse = await response.json();
 
       if (obj.status !== 200) {
         status = obj.status;
@@ -143,6 +147,9 @@ export const genericFetch = async (
 
       return obj;
     }
+
+    status = 505;
+    throw new Error("no valid option provided.");
   } catch (err: any) {
     return {
       message: err,
