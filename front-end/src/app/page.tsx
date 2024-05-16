@@ -1,5 +1,6 @@
 "use client";
 
+import { ChangeEvent } from "react";
 import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
 
@@ -16,11 +17,19 @@ export default function Home() {
     redirect("/login");
   }
 
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+  };
+
+  const onClick = () => {
+    console.log("oi");
+  };
+
   return (
     <main>
       <Header />
       <section>
-        <CardFetchPost />
+        <CardFetchPost onChange={onChange} onClick={onClick}/>
       </section>
       <section>
         <CardFetchUsersPost />
