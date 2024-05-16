@@ -98,37 +98,50 @@ export const genericFetch = async (
 
     const url = `http://localhost:8080/${endpoint}`;
 
-    switch (option) {
-      case "create-post":
-        const { message, createdDate, createdTime, user } = postObj;
-        const { email } = user;
+    if (option === "create-post") {
+      const { message, createdDate, createdTime, user } = postObj;
+      const { email } = user;
 
-        const response = await fetch(url, {
-          method,
-          cache: "no-cache",
-          headers: {
-            "Content-Type": "application/json",
+      const res = await fetch(url, {
+        method,
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          createdDate,
+          createdTime,
+          user: {
+            email,
           },
-          body: JSON.stringify({
-            message,
-            createdDate,
-            createdTime,
-            user: {
-              email,
-            },
-          }),
-        });
+        }),
+      });
 
-        const obj: IGenericResponse = await response.json();
+      const obj: IGenericResponse = await res.json();
 
-        if (obj.status !== 201) {
-          status = obj.status;
-          throw new Error(obj.message);
-        }
+      if (obj.status !== 201) {
+        status = obj.status;
+        throw new Error(obj.message);
+      }
 
-        return obj;
-      default:
-        break;
+      return obj;
+    }
+
+    if (option === "read-all-posts") {
+      const response = await fetch(url, {
+        method,
+        cache: "no-cache",
+      });
+
+      const obj = await response.json();
+
+      if (obj.status !== 200) {
+        status = obj.status;
+        throw new Error(obj.message);
+      }
+
+      return obj;
     }
   } catch (err: any) {
     return {
