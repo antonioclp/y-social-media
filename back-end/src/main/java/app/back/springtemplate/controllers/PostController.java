@@ -26,6 +26,11 @@ public class PostController {
     this.userService = userService;
   }
 
+  /**
+   * Method that connect with service and create a new post.
+   * Post message and others informations @param post
+   * Return a post object @return
+   */
   @PostMapping("/create/post")
   public ResponseEntity<ResponseDto<ReadPostDto>> createPost(@RequestBody Post post) {
     try {

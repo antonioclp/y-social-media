@@ -23,6 +23,13 @@ public class PostService {
     this.userRepository = userRepository;
   }
 
+  /**
+   * Method that create a new post.
+   * Post message and others informations @param post
+   * Post object @return
+   * 
+   * @throws ExceptionGeneric
+   */
   public Post createPost(Post post) throws ExceptionGeneric {
     Optional<User> optionalUser = userRepository.findUserByEmail(post.getUser().getEmail());
 
