@@ -63,7 +63,7 @@ public class UserController {
       User userByEmail = userService.readUser(user.getEmail(), user.getPassword());
       UserDto userDto = new UserDto(userByEmail.getUsername(), userByEmail.getNickname(), userByEmail.getEmail(),
           userByEmail.getPassword());
-      ResponseDto<UserDto> res = new ResponseDto<UserDto>("user founded sucessfully.", 200, userDto);
+      ResponseDto<UserDto> res = new ResponseDto<UserDto>("user logged sucessfully.", 200, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
     } catch (Exception e) {
