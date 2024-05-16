@@ -1,3 +1,5 @@
+import { Endpoints, FetchOption } from "../types";
+
 export interface IUser {
   email?: string;
   password?: string;
@@ -20,8 +22,8 @@ export interface IErrors {
 }
 
 export interface IGenericFetch {
-  option: string;
-  endpoint: string;
+  option: FetchOption;
+  endpoint: Endpoints;
   method: string;
 }
 
@@ -29,7 +31,7 @@ export interface ICreatePostFetch {
   message: string;
   createdDate: string;
   createdTime: string;
-  user: IUser
+  user: IUser;
 }
 
 export interface IGenericResponse {

@@ -87,7 +87,7 @@ export const fetchRegister = async (
   }
 };
 
-export const GenericFetch = async (
+export const genericFetch = async (
   fetchObj: IGenericFetch,
   postObj: ICreatePostFetch
 ) => {
@@ -121,7 +121,7 @@ export const GenericFetch = async (
 
         const obj: IGenericResponse = await response.json();
 
-        if (obj.status !== 200) {
+        if (obj.status !== 201) {
           status = obj.status;
           throw new Error(obj.message);
         }
