@@ -30,7 +30,7 @@ public class PostController {
   public ResponseEntity<ResponseDto<ReadPostDto>> createPost(@RequestBody Post post) {
     try {
       Post newPost = postService.createPost(post);
-      User userById = userService.readUserById(newPost.getUser().getId());
+      User userById = userService.readUser(newPost.getUser().getEmail(), newPost.getUser().getPassword());
 
       ReadUserDto readUserDto = new ReadUserDto(userById.getUsername(), userById.getNickname());
       ReadPostDto readPostDto = new ReadPostDto(newPost.getMessage(), newPost.getCreatedDate(),

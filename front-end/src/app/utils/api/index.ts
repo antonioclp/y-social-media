@@ -7,7 +7,7 @@ export const fetchLogin = async (
   let status: number = 0;
 
   try {
-    const url = `http://localhost:8080/users/${email}`;
+    const url = `http://localhost:8080/login/user`;
 
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -18,6 +18,7 @@ export const fetchLogin = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        email,
         password,
       }),
     });

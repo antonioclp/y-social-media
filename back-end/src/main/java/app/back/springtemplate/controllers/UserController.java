@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,10 +57,10 @@ public class UserController {
    * User email @param email
    * Return a user object @return
    */
-  @PostMapping("/users/{email}")
-  public ResponseEntity<ResponseDto<UserDto>> readUser(@PathVariable String email, @RequestBody User user) {
+  @PostMapping("/login/user")
+  public ResponseEntity<ResponseDto<UserDto>> readUser(@RequestBody User user) {
     try {
-      User userByEmail = userService.readUser(email, user.getPassword());
+      User userByEmail = userService.readUser(user.getEmail(), user.getPassword());
       UserDto userDto = new UserDto(userByEmail.getUsername(), userByEmail.getNickname(), userByEmail.getEmail(),
           userByEmail.getPassword());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user founded sucessfully.", 200, userDto);

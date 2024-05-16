@@ -24,7 +24,7 @@ public class PostService {
   }
 
   public Post createPost(Post post) throws ExceptionGeneric {
-    Optional<User> optionalUser = userRepository.findById(post.getUser().getId());
+    Optional<User> optionalUser = userRepository.findUserByEmail(post.getUser().getEmail());
 
     if (!optionalUser.isPresent()) {
       throw new ExceptionGeneric("user not found.");
