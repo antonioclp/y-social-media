@@ -51,6 +51,25 @@ public class UserService {
   }
 
   /**
+   * Method that find user by id.
+   * User id @param id
+   * User by id @return
+   * 
+   * @throws ExceptionGeneric
+   */
+  public User readUserById(Integer id) throws ExceptionGeneric {
+    Optional<User> optionalUser = userRepository.findById(id);
+
+    if (!optionalUser.isPresent()) {
+      throw new ExceptionGeneric("user not found.");
+    }
+
+    User user = optionalUser.get();
+
+    return user;
+  }
+
+  /**
    * Method that update a existing user.
    * User email @param email
    * User nickname @param nickname
