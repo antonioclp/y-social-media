@@ -41,9 +41,9 @@ public class PostController {
   public ResponseEntity<ResponseDto<ReadPostDto>> createPost(@RequestBody Post post) {
     try {
       Post newPost = postService.createPost(post);
-      User userById = userService.readUser(newPost.getUser().getEmail(), newPost.getUser().getPassword());
+      User userByEmail = userService.readUser(newPost.getUser().getEmail(), newPost.getUser().getPassword());
 
-      ReadUserDto readUserDto = new ReadUserDto(userById.getUsername(), userById.getNickname());
+      ReadUserDto readUserDto = new ReadUserDto(userByEmail.getUsername(), userByEmail.getNickname());
       ReadPostDto readPostDto = new ReadPostDto(newPost.getMessage(), newPost.getCreatedDate(),
           newPost.getCreatedTime(), readUserDto);
 

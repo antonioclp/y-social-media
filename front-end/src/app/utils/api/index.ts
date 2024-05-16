@@ -1,4 +1,9 @@
-import { IGenericResponse, IRegisterForm } from "../interfaces";
+import {
+  ICreatePostFetch,
+  IGenericFetch,
+  IGenericResponse,
+  IRegisterForm,
+} from "../interfaces";
 
 export const fetchLogin = async (
   email: string,
@@ -73,6 +78,58 @@ export const fetchRegister = async (
     }
 
     return obj;
+  } catch (err: any) {
+    return {
+      message: err,
+      status,
+      data: null,
+    };
+  }
+};
+
+export const GenericFetch = async (
+  fetchObj: IGenericFetch,
+  postObj: ICreatePostFetch
+) => {
+  let status: number = 0;
+
+  try {
+    const { option, endpoint, method } = fetchObj;
+
+    const url = `http://localhost:8080/${endpoint}`;
+
+    switch (option) {
+      case "create-post":
+        const { message, createdDate, createdTime, user } = postObj;
+        const { email } = user;
+
+        const response = await fetch(url, {
+          method,
+          cache: "no-cache",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message,
+            createdDate,
+            createdTime,
+            user: {
+              email,
+            },
+          }),
+        });
+
+        const obj: IGenericResponse = await response.json();
+
+        if (obj.status !== 200) {
+          status = obj.status;
+          throw new Error(obj.message);
+        }
+
+        return obj;
+      default:
+        break;
+    }
   } catch (err: any) {
     return {
       message: err,

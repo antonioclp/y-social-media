@@ -1,14 +1,8 @@
 export interface IUser {
-  email: string;
-  password: string;
-  nickname: string;
-  username: string;
-}
-
-export interface IGenericResponse {
-  message: string;
-  status: number;
-  data: IUser | null;
+  email?: string;
+  password?: string;
+  nickname?: string;
+  username?: string;
 }
 
 export interface IRegisterForm {
@@ -23,4 +17,23 @@ export interface IRegisterForm {
 export interface IErrors {
   activate: boolean;
   message: string;
+}
+
+export interface IGenericFetch {
+  option: string;
+  endpoint: string;
+  method: string;
+}
+
+export interface ICreatePostFetch {
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  user: IUser
+}
+
+export interface IGenericResponse {
+  message: string;
+  status: number;
+  data: IUser | ICreatePostFetch | null;
 }
