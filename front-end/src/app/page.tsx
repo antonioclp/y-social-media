@@ -10,7 +10,8 @@ import { Header } from "./utils/components/Header";
 import { Recommendations } from "./utils/components/Asides";
 
 // Interfaces
-import { IErrors, IUser } from "./utils/interfaces";
+import { ICreatePostFetch, IErrors, IUser } from "./utils/interfaces";
+import { genericFetch } from "./utils/api";
 
 /**
  * Front-end branch.
@@ -66,8 +67,48 @@ export default function Home() {
     setPostMsg(value);
   };
 
-  const onClick = () => {
-    console.log("oi");
+  const onClick = async () => {
+    const postInfo: ICreatePostFetch = {
+      message: postMsg,
+      createdDate: new Date().toISOString().split("T")[0],
+      createdTime: new Date().toISOString().split("T")[1].split(".")[0],
+      user: {
+        email: usrEmail,
+      },
+    };
+
+    const obj = await genericFetch(
+      { option: "create-post", endpoint: "create/post", method: "POST" },
+      postInfo
+    );
+
+    if (!obj) {
+      setErrorsMsg({
+        activate: true,
+        message: "Oops, there was a problem submitting your post",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    setErrorsMsg({
+      activate: true,
+      message: "Post sent successfully",
+    });
+
+    setTimeout(() => {
+      setErrorsMsg({
+        activate: false,
+        message: "",
+      });
+    }, 3000);
   };
 
   return (
@@ -79,6 +120,11 @@ export default function Home() {
           onClick={onClick}
           disable={isDisable}
         />
+        {errorsMsg.activate ? (
+          <span>{errorsMsg.message}</span>
+        ) : (
+          <span>Send your message</span>
+        )}
       </section>
       <section>
         <CardFetchUsersPost />
