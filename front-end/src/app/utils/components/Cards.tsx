@@ -2,30 +2,35 @@ import { ChangeEvent } from "react";
 
 // Interfaces
 import { IPostsFetch } from "../interfaces";
+import Image from "next/image";
 
 export const CardFetchPost = ({
   onChange,
   onClick,
-  disable,
 }: {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onClick: () => void;
-  disable: boolean;
 }) => {
   return (
-    <article>
+    <article className="section--1_artcl">
       <section>
-        <input
-          type="text"
+        <textarea
           placeholder="What's you thinking?"
-          max={250}
+          maxLength={250}
           onChange={onChange}
+          rows={2}
+          cols={20}
+          style={{ width: "100%", boxSizing: "border-box" }}
         />
       </section>
       <section>
-        <button type="button" onClick={onClick} disabled={disable}>
-          Send
-        </button>
+        <Image
+          src="/icons/arrow-message.png"
+          alt="send-message"
+          height={20}
+          width={20}
+          onClick={onClick}
+        />
       </section>
     </article>
   );

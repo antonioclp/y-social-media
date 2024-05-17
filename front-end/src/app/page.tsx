@@ -18,6 +18,9 @@ import {
 } from "./utils/interfaces";
 import { genericFetch } from "./utils/api";
 
+// Style
+import "@/styles/pages/home.css";
+
 /**
  * Front-end branch.
  */
@@ -29,7 +32,6 @@ export default function Home() {
     activate: false,
     message: "",
   });
-  const [isDisable, setIsDisable] = useState<boolean>(true);
 
   useEffect(() => {
     if (!Cookies.get("dXNy")) {
@@ -76,10 +78,10 @@ export default function Home() {
     fetchPosts();
   }, []);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
 
-    if (value.length >= 250) {
+    if (value.trim().length >= 250) {
       setErrorsMsg({
         activate: true,
         message: "max characters exceeded",
@@ -95,17 +97,26 @@ export default function Home() {
       return;
     }
 
-    if (value.length === 0) {
-      setIsDisable(true);
-
-      return;
-    }
-
-    setIsDisable(false);
     setPostMsg(value);
   };
 
   const onClick = async () => {
+    if (postMsg.trim().length < 2) {
+      setErrorsMsg({
+        activate: true,
+        message: "min characteres allowed is 2",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 1000);
+
+      return;
+    }
+
     const postInfo: IPostsFetch = {
       message: postMsg,
       createdDate: new Date().toISOString().split("T")[0],
@@ -150,14 +161,10 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className="hm-main">
       <Header />
-      <section>
-        <CardFetchPost
-          onChange={onChange}
-          onClick={onClick}
-          disable={isDisable}
-        />
+      <section className="hm-main-section--1">
+        <CardFetchPost onChange={onChange} onClick={onClick} />
         {errorsMsg.activate ? (
           <span>{errorsMsg.message}</span>
         ) : (
@@ -167,7 +174,7 @@ export default function Home() {
       {posts.length >= 1
         ? posts.map((p, index) => {
             return (
-              <section key={index}>
+              <section key={index} className="hm-main-section--2">
                 <CardFetchUsersPost
                   message={p.message}
                   createdDate={p.createdDate}
