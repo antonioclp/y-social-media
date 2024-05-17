@@ -39,11 +39,16 @@ export const CardFetchUsersPost = ({
 }: IPostsFetch) => {
   return (
     <article>
-      <section>{user.username}</section>
-      <section>{user.nickname}</section>
-      <section>{message}</section>
-      <section>{createdDate}</section>
-      <section>{createdTime}</section>
+      <section>
+        <span>{user.nickname}</span>
+      </section>
+      <section>
+        <p>{message}</p>
+      </section>
+      <section>
+        <span>{createdDate}</span>
+        <span>{createdTime}</span>
+      </section>
     </article>
   );
 };

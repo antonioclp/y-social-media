@@ -98,13 +98,13 @@ export const genericFetch = async (
   try {
     const { option, endpoint, method } = fetchObj;
 
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     const url = `http://localhost:8080/${endpoint}`;
 
     if (option === "create-post" && postObj) {
       const { message, createdDate, createdTime, user } = postObj;
       const { email } = user;
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
       const res = await fetch(url, {
         method,
