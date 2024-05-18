@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import moment from "moment";
 
 // Interfaces
 import { IPostsFetch } from "../interfaces";
@@ -42,6 +43,10 @@ export const CardFetchUsersPost = ({
   createdTime,
   user,
 }: IPostsFetch) => {
+  const createdDateTime = `${createdDate} ${createdTime}`;
+  const formattedDate = moment(createdDate).format('YYYY MM DD');
+  const relativeTime = moment(createdDateTime).fromNow();
+
   return (
     <article className="section--2_artcl">
       <section>
@@ -51,8 +56,8 @@ export const CardFetchUsersPost = ({
         <span>{message}</span>
       </section>
       <section className="section--2_artcl_time">
-        <span>{createdDate}</span>
-        <span>{createdTime}</span>
+        <span>{formattedDate}</span>
+        <span>{relativeTime}</span>
       </section>
     </article>
   );
