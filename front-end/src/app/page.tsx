@@ -3,6 +3,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
+import moment from "moment";
 
 // Components
 import { CardFetchPost, CardFetchUsersPost } from "./utils/components/Cards";
@@ -119,8 +120,8 @@ export default function Home() {
 
     const postInfo: IPostsFetch = {
       message: postMsg,
-      createdDate: new Date().toISOString().split("T")[0],
-      createdTime: new Date().toISOString().split("T")[1].split(".")[0],
+      createdDate: moment().format('YYYY-MM-DD'),
+      createdTime: moment().format('HH:mm:ss'),
       user: {
         email: usrEmail,
       },

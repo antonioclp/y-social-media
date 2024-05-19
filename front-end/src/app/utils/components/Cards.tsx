@@ -43,8 +43,8 @@ export const CardFetchUsersPost = ({
   createdTime,
   user,
 }: IPostsFetch) => {
-  const createdDateTime = `${createdDate} ${createdTime}`;
   const formattedDate = moment(createdDate).format('YYYY MM DD');
+  const createdDateTime = `${createdDate} ${createdTime}`;
   const relativeTime = moment(createdDateTime).fromNow();
 
   return (
