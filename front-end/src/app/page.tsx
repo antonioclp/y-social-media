@@ -7,8 +7,6 @@ import moment from "moment";
 
 // Components
 import { CardFetchPost, CardFetchUsersPost } from "./utils/components/Cards";
-import { Header } from "./utils/components/Header";
-import { Recommendations } from "./utils/components/Asides";
 
 // Interfaces
 import {
@@ -21,12 +19,14 @@ import { genericFetch } from "./utils/api";
 
 // Style
 import "@/styles/pages/home.css";
+import { Navegation } from "./utils/components/Asides";
 
 /**
  * Front-end branch.
  */
 export default function Home() {
   const [posts, setPosts] = useState<IPostsFetch[]>([]);
+  const [usrNickname, setUsrNickname] = useState<string>("");
   const [usrEmail, setUsrEmail] = useState<string>();
   const [postMsg, setPostMsg] = useState<string>("");
   const [errorsMsg, setErrorsMsg] = useState<IErrors>({
@@ -41,9 +41,11 @@ export default function Home() {
 
     const obj: IUser = JSON.parse(Cookies.get("dXNy") || "{}");
 
-    if (!obj.email) {
+    if (!obj.email && !obj.nickname) {
       redirect("/login");
     }
+
+    setUsrNickname(obj.nickname as string);
 
     const fetchPosts = async () => {
       const objs: IGenericResponse = await genericFetch({
@@ -120,8 +122,8 @@ export default function Home() {
 
     const postInfo: IPostsFetch = {
       message: postMsg,
-      createdDate: moment().format('YYYY-MM-DD'),
-      createdTime: moment().format('HH:mm:ss'),
+      createdDate: moment().format("YYYY-MM-DD"),
+      createdTime: moment().format("HH:mm:ss"),
       user: {
         email: usrEmail,
       },
@@ -163,8 +165,8 @@ export default function Home() {
 
   return (
     <main className="hm-main">
-      <Header />
       <section className="hm-main-section--1">
+        <Navegation nickname={usrNickname} />
         <CardFetchPost onChange={onChange} onClick={onClick} />
         {errorsMsg.activate ? (
           <span>{errorsMsg.message}</span>
@@ -186,7 +188,6 @@ export default function Home() {
             );
           })
         : null}
-      <Recommendations />
     </main>
   );
 }
