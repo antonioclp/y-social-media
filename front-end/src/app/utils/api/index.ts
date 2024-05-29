@@ -91,7 +91,8 @@ export const fetchRegister = async (
 
 export const genericFetch = async (
   fetchObj: IGenericFetch,
-  postObj?: IPostsFetch
+  postObj?: IPostsFetch | null,
+  nickname?: string
 ): Promise<IGenericResponse> => {
   let status: number = 0;
 
@@ -139,6 +140,23 @@ export const genericFetch = async (
       });
 
       const obj: IGenericResponse = await response.json();
+
+      if (obj.status !== 200) {
+        status = obj.status;
+        throw new Error(obj.message);
+      }
+
+      return obj;
+    }
+
+    if (option === "read-user-posts") {
+      const urlByNickname = `${url + "/" + nickname}`;
+      const response = await fetch(urlByNickname, {
+        method,
+        cache: "no-cache",
+      });
+
+      const obj = await response.json();
 
       if (obj.status !== 200) {
         status = obj.status;
