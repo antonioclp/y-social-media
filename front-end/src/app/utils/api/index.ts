@@ -109,6 +109,7 @@ export const updateFetch = async (
       body: JSON.stringify({
         email,
         password,
+        username,
         nickname,
         bio,
       }),
