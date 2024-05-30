@@ -3,6 +3,7 @@ import {
   IGenericResponse,
   IPostsFetch,
   IRegisterForm,
+  IUpdate,
 } from "../interfaces";
 
 export const fetchLogin = async (
@@ -75,6 +76,47 @@ export const fetchRegister = async (
     const obj: IGenericResponse = await response.json();
 
     if (obj.status !== 201) {
+      status = obj.status;
+      throw new Error(obj.message);
+    }
+
+    return obj;
+  } catch (err: any) {
+    return {
+      message: err,
+      status,
+      data: null,
+    };
+  }
+};
+
+export const updateFetch = async (
+  updateObj: IUpdate
+): Promise<IGenericResponse> => {
+  let status = 0;
+
+  try {
+    const { email, nickname, password, username, bio } = updateObj;
+
+    const url = `http://localhost:8080/update/user`;
+
+    const res = await fetch(url, {
+      method: "PUT",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        nickname,
+        bio,
+      }),
+    });
+
+    const obj: IGenericResponse = await res.json();
+
+    if (obj.status !== 200) {
       status = obj.status;
       throw new Error(obj.message);
     }

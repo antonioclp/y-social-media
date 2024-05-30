@@ -104,7 +104,7 @@ public class UserService {
       user.setUsername(username);
     }
 
-    if (bio != null) {
+    if (bio != null && !bio.isBlank()) {
       user.setBio(bio);
     }
 

@@ -35,6 +35,14 @@ export interface IPostsFetch {
   user: IUser;
 }
 
+export interface IUpdate {
+  email: string;
+  password: string;
+  username?: string;
+  nickname?: string;
+  bio?: string;
+}
+
 export interface IGenericResponse {
   message: string;
   status: number;
