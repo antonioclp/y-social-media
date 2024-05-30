@@ -41,7 +41,7 @@ public class UserController {
     try {
       User newUser = userService.createUser(user);
       UserDto userDto = new UserDto(newUser.getUsername(), newUser.getNickname(), newUser.getEmail(),
-          newUser.getPassword());
+          newUser.getPassword(), newUser.getBio());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user registered sucessfully", 201, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
@@ -62,7 +62,7 @@ public class UserController {
     try {
       User userByEmail = userService.readUser(user.getEmail(), user.getPassword());
       UserDto userDto = new UserDto(userByEmail.getUsername(), userByEmail.getNickname(), userByEmail.getEmail(),
-          userByEmail.getPassword());
+          userByEmail.getPassword(), userByEmail.getBio());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user logged sucessfully.", 200, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
@@ -133,7 +133,7 @@ public class UserController {
     try {
       User deletedUser = userService.deleteUser(user.getEmail(), user.getPassword());
       UserDto userDto = new UserDto(deletedUser.getUsername(), deletedUser.getNickname(), deletedUser.getEmail(),
-          deletedUser.getPassword());
+          deletedUser.getPassword(), deletedUser.getBio());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user deleted sucessfully", 200, userDto);
 
       return ResponseEntity.status(res.status()).body(res);

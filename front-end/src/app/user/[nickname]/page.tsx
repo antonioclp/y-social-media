@@ -6,30 +6,45 @@ import Image from "next/image";
 import Cookies from "js-cookie";
 
 // Interfaces
-import { IPostsFetch, IUser } from "@/app/utils/interfaces";
-import { genericFetch } from "@/app/utils/api";
+import {
+  IGenericResponse,
+  IPostsFetch,
+  IUpdate,
+  IUser,
+} from "@/app/utils/interfaces";
+import { genericFetch, updateFetch } from "@/app/utils/api";
 import { CardFetchUsersPost } from "@/app/utils/components/Cards";
 
 export default function Profile() {
-  const [usrObj, setUsrObj] = useState<IUser>({});
+  const [usrObj, setUsrObj] = useState<IUser>({
+    email: "",
+    password: "",
+    nickname: "",
+    username: "",
+    bio: "",
+  });
   const [usrPosts, setUsrPosts] = useState<IPostsFetch[]>([]);
   const [editBioEnable, setEditBioEnable] = useState<boolean>(false);
+  const [strBio, setStrBio] = useState<string>("");
 
   useEffect(() => {
-    try {
-      if (!Cookies.get("dXNy")) {
-        redirect("/login");
-      }
+    const fetchUserData = async () => {
+      try {
+        const userCookie = Cookies.get("dXNy");
 
-      const obj: IUser = JSON.parse(Cookies.get("dXNy") || "{}");
+        if (!userCookie) {
+          redirect("/login");
+        }
 
-      if (!obj.email && !obj.nickname) {
-        redirect("/login");
-      }
+        const obj: IUser = JSON.parse(userCookie);
 
-      setUsrObj(obj);
+        if (!obj.email || !obj.nickname) {
+          redirect("/login");
+        }
 
-      const fetchPosts = async () => {
+        setUsrObj(obj);
+        setStrBio(obj.bio || "");
+
         const res = await genericFetch(
           {
             endpoint: "posts",
@@ -43,16 +58,16 @@ export default function Profile() {
         if (res.data !== null && Array.isArray(res.data)) {
           setUsrPosts(res.data);
         }
-      };
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-      fetchPosts();
-    } catch (err) {
-      console.error(err);
-    }
+    fetchUserData();
   }, []);
 
-  const onClick = (event: React.MouseEvent<HTMLImageElement>) => {
-    const target = event.target as HTMLImageElement;
+  const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
     const { id } = target;
 
     if (id === "edit-bio") {
@@ -61,8 +76,38 @@ export default function Profile() {
     }
 
     if (id === "confirm-edit") {
-      setEditBioEnable(false);
-      return;
+      const { email, password } = usrObj;
+
+      if (email && password) {
+        const obj: IUpdate = {
+          email,
+          password,
+          bio: strBio,
+        };
+
+        const updatedUser: IGenericResponse = await updateFetch(obj);
+        const newInfo = updatedUser.data as IUser;
+
+        setUsrObj((prev) => ({
+          ...prev,
+          username: newInfo.username,
+          nickname: newInfo.nickname,
+          bio: newInfo.bio,
+        }));
+
+        setStrBio(newInfo.bio || "");
+        Cookies.set("dXNy", JSON.stringify({ ...usrObj, bio: newInfo.bio }));
+        setEditBioEnable(false);
+      }
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const target = e.target;
+    const { name, value } = target;
+
+    if (name === "textarea-bio") {
+      setStrBio(value);
     }
   };
 
@@ -78,6 +123,9 @@ export default function Profile() {
               maxLength={250}
               rows={2}
               cols={20}
+              name="textarea-bio"
+              onChange={handleChange}
+              value={strBio}
             ></textarea>
             <Image
               src="/icons/confirmation.png"
@@ -86,7 +134,7 @@ export default function Profile() {
               height={20}
               priority
               id="confirm-edit"
-              onClick={onClick}
+              onClick={handleClick}
             />
           </section>
         ) : (
@@ -99,24 +147,24 @@ export default function Profile() {
           height={20}
           priority
           id="edit-bio"
-          onClick={onClick}
+          onClick={handleClick}
         />
       </section>
       <section>
-        {usrPosts.length > 0
-          ? usrPosts.map((p, index) => {
-              return (
-                <section key={index}>
-                  <CardFetchUsersPost
-                    user={p.user}
-                    createdDate={p.createdDate}
-                    createdTime={p.createdTime}
-                    message={p.message}
-                  />
-                </section>
-              );
-            })
-          : null}
+        {usrPosts.length > 0 ? (
+          usrPosts.map((p, index) => (
+            <section key={index}>
+              <CardFetchUsersPost
+                user={p.user}
+                createdDate={p.createdDate}
+                createdTime={p.createdTime}
+                message={p.message}
+              />
+            </section>
+          ))
+        ) : (
+          <p>No posts available.</p>
+        )}
       </section>
     </main>
   );
