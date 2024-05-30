@@ -5,6 +5,7 @@ export interface IUser {
   password?: string;
   nickname?: string;
   username?: string;
+  bio?: string;
 }
 
 export interface IRegisterForm {

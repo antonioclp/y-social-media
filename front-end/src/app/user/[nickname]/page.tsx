@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import Cookies from "js-cookie";
 
 // Interfaces
@@ -51,7 +52,21 @@ export default function Profile() {
 
   return (
     <main>
-      <div>
+      <section>
+        <span>{usrObj.nickname}</span>
+        <span>{usrObj.username}</span>
+        <section>
+          <p>{usrObj.bio}</p>
+          <Image
+            src="/icons/edit.png"
+            alt="bio"
+            width={20}
+            height={20}
+            priority
+          />
+        </section>
+      </section>
+      <section>
         {usrPosts.length > 0
           ? usrPosts.map((p, index) => {
               return (
@@ -66,7 +81,7 @@ export default function Profile() {
               );
             })
           : null}
-      </div>
+      </section>
     </main>
   );
 }
