@@ -35,6 +35,9 @@ public class User {
   @Column(name = "age", nullable = false)
   int age;
 
+  @Column(name = "bio")
+  String bio;
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   List<Post> posts;
 
@@ -49,13 +52,14 @@ public class User {
    * User email @param email
    * User password @param password
    */
-  public User(Integer id, String nickname, String username, String email, String password, int age) {
+  public User(Integer id, String nickname, String username, String email, String password, int age, String bio) {
     this.id = id;
     this.nickname = nickname;
     this.username = username;
     this.email = email;
     this.password = password;
     this.age = age;
+    this.bio = bio;
   }
 
   public Integer getId() {
@@ -104,6 +108,14 @@ public class User {
 
   public void setAge(int age) {
     this.age = age;
+  }
+
+  public String getBio() {
+    return bio;
+  }
+
+  public void setBio(String bio) {
+    this.bio = bio;
   }
 
 }

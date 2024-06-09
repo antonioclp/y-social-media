@@ -83,7 +83,7 @@ public class UserService {
    * 
    * @throws ExceptionGeneric
    */
-  public User updateUser(String email, String nickname, String username, String password) throws ExceptionGeneric {
+  public User updateUser(String email, String nickname, String username, String password, String bio) throws ExceptionGeneric {
     Optional<User> optionalUser = userRepository.findUserByEmail(email);
 
     if (!optionalUser.isPresent()) {
@@ -102,6 +102,10 @@ public class UserService {
 
     if (username != null && !username.isBlank()) {
       user.setUsername(username);
+    }
+
+    if (bio != null && !bio.isBlank()) {
+      user.setBio(bio);
     }
 
     return userRepository.save(user);

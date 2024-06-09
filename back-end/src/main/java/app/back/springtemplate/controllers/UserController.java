@@ -41,7 +41,7 @@ public class UserController {
     try {
       User newUser = userService.createUser(user);
       UserDto userDto = new UserDto(newUser.getUsername(), newUser.getNickname(), newUser.getEmail(),
-          newUser.getPassword());
+          newUser.getPassword(), newUser.getBio());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user registered sucessfully", 201, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
@@ -62,7 +62,7 @@ public class UserController {
     try {
       User userByEmail = userService.readUser(user.getEmail(), user.getPassword());
       UserDto userDto = new UserDto(userByEmail.getUsername(), userByEmail.getNickname(), userByEmail.getEmail(),
-          userByEmail.getPassword());
+          userByEmail.getPassword(), userByEmail.getBio());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user logged sucessfully.", 200, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
@@ -87,7 +87,8 @@ public class UserController {
   public ResponseEntity<ResponseDto<List<ReadUserDto>>> readAllUsers() {
     try {
       List<User> users = userService.readAllUsers();
-      List<ReadUserDto> readUsersDto = users.stream().map(u -> new ReadUserDto(u.getUsername(), u.getNickname()))
+      List<ReadUserDto> readUsersDto = users.stream()
+          .map(u -> new ReadUserDto(u.getUsername(), u.getNickname(), u.getBio()))
           .collect(Collectors.toList());
       ResponseDto<List<ReadUserDto>> res = new ResponseDto<List<ReadUserDto>>("all users founded sucessfully.", 200,
           readUsersDto);
@@ -109,8 +110,9 @@ public class UserController {
   public ResponseEntity<ResponseDto<ReadUserDto>> updateUser(@RequestBody User user) {
     try {
       User updatedUser = userService.updateUser(user.getEmail(), user.getNickname(), user.getUsername(),
-          user.getPassword());
-      ReadUserDto readUserDto = new ReadUserDto(updatedUser.getUsername(), updatedUser.getNickname());
+          user.getPassword(), user.getBio());
+      ReadUserDto readUserDto = new ReadUserDto(updatedUser.getUsername(), updatedUser.getNickname(),
+          updatedUser.getBio());
       ResponseDto<ReadUserDto> res = new ResponseDto<ReadUserDto>("updated sucessfully.", 200, readUserDto);
 
       return ResponseEntity.status(res.status()).body(res);
@@ -131,7 +133,7 @@ public class UserController {
     try {
       User deletedUser = userService.deleteUser(user.getEmail(), user.getPassword());
       UserDto userDto = new UserDto(deletedUser.getUsername(), deletedUser.getNickname(), deletedUser.getEmail(),
-          deletedUser.getPassword());
+          deletedUser.getPassword(), deletedUser.getBio());
       ResponseDto<UserDto> res = new ResponseDto<UserDto>("user deleted sucessfully", 200, userDto);
 
       return ResponseEntity.status(res.status()).body(res);
