@@ -161,6 +161,8 @@ export default function Home() {
         message: "",
       });
     }, 3000);
+
+    location.reload();
   };
 
   return (
