@@ -7,10 +7,8 @@ import app.back.springtemplate.models.entity.Post;
 import app.back.springtemplate.models.entity.User;
 import app.back.springtemplate.services.PostService;
 import app.back.springtemplate.services.UserService;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
