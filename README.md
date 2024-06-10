@@ -66,7 +66,7 @@ npm run back
 
 ### Types
 
-> This project have a types in `/front-end/src/app/utils`
+> This project have types in `/front-end/src/app/utils`
 
 ```bash
 utils/
