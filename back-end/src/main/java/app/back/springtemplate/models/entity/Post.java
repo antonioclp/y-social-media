@@ -2,13 +2,18 @@ package app.back.springtemplate.models.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 /**
@@ -19,19 +24,23 @@ import jakarta.persistence.Table;
 public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Integer id;
+  private Integer id;
 
   @Column(name = "message", nullable = false)
-  String message;
+  private String message;
 
   @Column(name = "created_date", nullable = false)
-  LocalDate createdDate;
+  private LocalDate createdDate;
 
   @Column(name = "created_time", nullable = false)
-  LocalTime createdTime;
+  private LocalTime createdTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  User user;
+  @JoinColumn(name = "user_id")
+  private User user;
+
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+  private List<Comment> comments;
 
   public Post() {
   }

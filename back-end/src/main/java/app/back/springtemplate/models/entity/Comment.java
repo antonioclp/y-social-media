@@ -20,24 +20,24 @@ import jakarta.persistence.Table;
 public class Comment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Integer id;
+  private Integer id;
 
   @Column(name = "message", nullable = false)
-  String message;
+  private String message;
 
   @Column(name = "created_date", nullable = false)
-  LocalDate createdDate;
+  private LocalDate createdDate;
 
   @Column(name = "created_time", nullable = false)
-  LocalTime createdTime;
+  private LocalTime createdTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  User user;
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "post_id", nullable = false)
-  Post post;
+  @JoinColumn(name = "post_id")
+  private Post post;
 
   /**
    * Constructor.
