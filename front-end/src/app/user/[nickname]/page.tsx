@@ -56,7 +56,21 @@ export default function Profile() {
         );
 
         if (res.data !== null && Array.isArray(res.data)) {
-          setUsrPosts(res.data);
+          const posts: IPostsFetch[] = res.data;
+          const sortedPosts = posts.sort((postA, postB) => {
+            const dateComparison = postB.createdDate.localeCompare(
+              postA.createdDate
+            );
+
+            if (dateComparison === 0) {
+              return postB.createdTime.localeCompare(postA.createdTime);
+            }
+
+            return dateComparison;
+          });
+
+          setUsrPosts(sortedPosts);
+          return;
         }
       } catch (err) {
         console.error(err);
