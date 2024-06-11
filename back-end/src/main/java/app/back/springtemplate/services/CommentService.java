@@ -64,7 +64,7 @@ public class CommentService {
    * 
    * @throws ExceptionGeneric
    */
-  public List<Comment> getCommentsByPostId(Integer id) throws ExceptionGeneric {
+  public List<Comment> readCommentsByPostId(Integer id) throws ExceptionGeneric {
     Optional<Post> optionalPost = postRepository.findById(id);
 
     if (!optionalPost.isPresent()) {
@@ -74,6 +74,10 @@ public class CommentService {
     Post post = optionalPost.get();
 
     List<Comment> comments = post.getComments();
+
+    if(comments.isEmpty()) {
+      throw new ExceptionGeneric("no comments founded.");
+    }
 
     return comments;
   }
