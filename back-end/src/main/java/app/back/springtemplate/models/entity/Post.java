@@ -59,6 +59,14 @@ public class Post {
     this.createdTime = createdTime;
   }
 
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
   public Integer getId() {
     return id;
   }

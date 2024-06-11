@@ -28,6 +28,11 @@ public class CommentController {
     this.commentService = commentService;
   }
 
+  /**
+   * Method that connect with service and create a new comment in post
+   * Comment message and others informations @param comment
+   * Return a comment obj @return
+   */
   @PostMapping("/create/comment")
   public ResponseEntity<ResponseDto<ReadComment>> createComment(@RequestBody Comment comment) {
     try {
@@ -41,7 +46,7 @@ public class CommentController {
       User postUser = post.getUser();
 
       ReadUserDto readPostUserDto = new ReadUserDto(postUser.getUsername(), postUser.getNickname(), postUser.getBio());
-      ReadPostDto readPostDto = new ReadPostDto(post.getMessage(), post.getCreatedDate(), post.getCreatedTime(),
+      ReadPostDto readPostDto = new ReadPostDto(post.getId(), post.getMessage(), post.getCreatedDate(), post.getCreatedTime(),
           readPostUserDto);
 
       ReadComment readComment = new ReadComment(newComment.getMessage(), newComment.getCreatedDate(),
