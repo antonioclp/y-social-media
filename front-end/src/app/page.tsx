@@ -1,12 +1,13 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import moment from "moment";
 
 // Components
 import { CardFetchPost, CardFetchUsersPost } from "./utils/components/Cards";
+import { Navegation } from "./utils/components/Asides";
 
 // Interfaces
 import {
@@ -16,11 +17,12 @@ import {
   IPostsFetch,
   IUser,
 } from "./utils/interfaces";
+
+// Api
 import { genericFetch } from "./utils/api";
 
 // Style
 import "@/styles/pages/home.css";
-import { Navegation } from "./utils/components/Asides";
 
 /**
  * Front-end branch.
@@ -34,6 +36,8 @@ export default function Home() {
     activate: false,
     message: "",
   });
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!Cookies.get("dXNy")) {
@@ -104,7 +108,21 @@ export default function Home() {
     setPostMsg(value);
   };
 
-  const onClick = async () => {
+  const onClick = async (e: React.MouseEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    const { alt } = target;
+
+    if (alt === "comments") {
+      const artcl = target.closest("article");
+
+      if (!artcl) {
+        return;
+      }
+
+      router.push(`/post/${artcl.id}`);
+      return;
+    }
+
     if (postMsg.trim().length < 2) {
       setErrorsMsg({
         activate: true,
@@ -187,6 +205,7 @@ export default function Home() {
                   createdDate={p.createdDate}
                   createdTime={p.createdTime}
                   user={p.user}
+                  onClick={onClick}
                 />
               </section>
             );

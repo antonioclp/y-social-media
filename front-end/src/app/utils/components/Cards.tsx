@@ -4,13 +4,14 @@ import moment from "moment";
 // Interfaces
 import { IGetPosts } from "../interfaces";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export const CardFetchPost = ({
   onChange,
   onClick,
 }: {
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLImageElement>) => void;
 }) => {
   return (
     <article className="section--1_artcl">
@@ -43,7 +44,8 @@ export const CardFetchUsersPost = ({
   createdDate,
   createdTime,
   user,
-}: IGetPosts) => {
+  onClick,
+}: IGetPosts & { onClick: (e: React.MouseEvent<HTMLImageElement>) => void }) => {
   const formattedDate = moment(createdDate).format("YYYY MM DD");
   const createdDateTime = `${createdDate} ${createdTime}`;
   const relativeTime = moment(createdDateTime).fromNow();
@@ -63,6 +65,7 @@ export const CardFetchUsersPost = ({
           alt="comments"
           width={20}
           height={20}
+          onClick={onClick}
         />
         <span>{relativeTime}</span>
       </section>

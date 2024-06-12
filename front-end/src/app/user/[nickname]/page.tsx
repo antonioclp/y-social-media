@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Image from "next/image";
 import Cookies from "js-cookie";
 
 // Interfaces
 import {
   IGenericResponse,
-  IPostsFetch,
+  IGetPosts,
   IUpdate,
   IUser,
 } from "@/app/utils/interfaces";
@@ -23,9 +23,11 @@ export default function Profile() {
     username: "",
     bio: "",
   });
-  const [usrPosts, setUsrPosts] = useState<IPostsFetch[]>([]);
+  const [usrPosts, setUsrPosts] = useState<IGetPosts[]>([]);
   const [editBioEnable, setEditBioEnable] = useState<boolean>(false);
   const [strBio, setStrBio] = useState<string>("");
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -66,9 +68,9 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
-  const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
+  const onClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
-    const { id } = target;
+    const { id, alt } = target;
 
     if (id === "edit-bio") {
       setEditBioEnable(true);
@@ -100,9 +102,19 @@ export default function Profile() {
         setEditBioEnable(false);
       }
     }
+
+    if (alt === "comments") {
+      const artcl = target.closest("article");
+
+      if (!artcl) {
+        return;
+      }
+
+      router.push(`/post/${artcl.id}`);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const target = e.target;
     const { name, value } = target;
 
@@ -124,7 +136,7 @@ export default function Profile() {
               rows={2}
               cols={20}
               name="textarea-bio"
-              onChange={handleChange}
+              onChange={onChange}
               value={strBio}
             ></textarea>
             <Image
@@ -134,7 +146,7 @@ export default function Profile() {
               height={20}
               priority
               id="confirm-edit"
-              onClick={handleClick}
+              onClick={onClick}
             />
           </section>
         ) : (
@@ -147,7 +159,7 @@ export default function Profile() {
           height={20}
           priority
           id="edit-bio"
-          onClick={handleClick}
+          onClick={onClick}
         />
       </section>
       <section>
@@ -160,6 +172,7 @@ export default function Profile() {
                 createdDate={p.createdDate}
                 createdTime={p.createdTime}
                 message={p.message}
+                onClick={onClick}
               />
             </section>
           ))
