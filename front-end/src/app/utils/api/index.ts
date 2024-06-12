@@ -199,7 +199,23 @@ export const genericFetch = async (
         cache: "no-cache",
       });
 
-      const obj = await response.json();
+      const obj: IGenericResponse = await response.json();
+
+      if (obj.status !== 200) {
+        status = obj.status;
+        throw new Error(obj.message);
+      }
+
+      return obj;
+    }
+
+    if (option === "read-comments-by-post") {
+      const response = await fetch(url, {
+        method,
+        cache: "no-cache",
+      });
+
+      const obj: IGenericResponse = await response.json();
 
       if (obj.status !== 200) {
         status = obj.status;

@@ -52,8 +52,17 @@ export interface IUpdate {
   bio?: string;
 }
 
+export interface IGetComments {
+  commentId: number;
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  postId: number;
+  user: IUser;
+}
+
 export interface IGenericResponse {
   message: string;
   status: number;
-  data: IUser | IPostsFetch | IGetPosts | null;
+  data: IUser | IPostsFetch | IGetPosts | IGetComments | null;
 }
