@@ -41,7 +41,7 @@ public class PostController {
       Post newPost = postService.createPost(post);
       User userByEmail = userService.readUser(newPost.getUser().getEmail(), newPost.getUser().getPassword());
 
-      ReadUserDto readUserDto = new ReadUserDto(userByEmail.getUsername(), userByEmail.getNickname(),
+      ReadUserDto readUserDto = new ReadUserDto(userByEmail.getId(), userByEmail.getUsername(), userByEmail.getNickname(),
           userByEmail.getBio());
       ReadPostDto readPostDto = new ReadPostDto(newPost.getId(), newPost.getMessage(), newPost.getCreatedDate(),
           newPost.getCreatedTime(), readUserDto);
@@ -66,7 +66,7 @@ public class PostController {
       List<Post> posts = postService.readAllPosts();
       List<ReadPostDto> readPostsDto = posts.stream()
           .map(p -> new ReadPostDto(p.getId(), p.getMessage(), p.getCreatedDate(), p.getCreatedTime(),
-              new ReadUserDto(p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
+              new ReadUserDto(p.getId(), p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
           .collect(Collectors.toList());
 
       ResponseDto<List<ReadPostDto>> res = new ResponseDto<List<ReadPostDto>>("success", 200, readPostsDto);
@@ -89,7 +89,7 @@ public class PostController {
       List<Post> postsByUserNickname = postService.readPostsByUserNickname(nickname);
       List<ReadPostDto> readPostsDto = postsByUserNickname.stream()
           .map(p -> new ReadPostDto(p.getId(), p.getMessage(), p.getCreatedDate(), p.getCreatedTime(),
-              new ReadUserDto(p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
+              new ReadUserDto(p.getId(), p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
           .collect(Collectors.toList());
 
       ResponseDto<List<ReadPostDto>> res = new ResponseDto<List<ReadPostDto>>("sucess", 200, readPostsDto);

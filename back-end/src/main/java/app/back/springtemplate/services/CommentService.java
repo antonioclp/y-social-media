@@ -75,7 +75,7 @@ public class CommentService {
 
     List<Comment> comments = post.getComments();
 
-    if(comments.isEmpty()) {
+    if (comments.isEmpty()) {
       throw new ExceptionGeneric("no comments founded.");
     }
 

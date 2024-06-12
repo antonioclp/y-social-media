@@ -1,7 +1,6 @@
 package app.back.springtemplate.controllers;
 
 import app.back.springtemplate.controllers.dtos.ReadComment;
-import app.back.springtemplate.controllers.dtos.ReadPostDto;
 import app.back.springtemplate.controllers.dtos.ReadUserDto;
 import app.back.springtemplate.controllers.dtos.ResponseDto;
 import app.back.springtemplate.models.entity.Comment;
@@ -45,17 +44,11 @@ public class CommentController {
       Post post = newComment.getPost();
       User user = newComment.getUser();
 
-      ReadUserDto readUserDto = new ReadUserDto(user.getUsername(), user.getNickname(), user.getBio());
+      ReadUserDto readUserDto = new ReadUserDto(user.getId(), user.getUsername(), user.getNickname(), user.getBio());
 
-      User postUser = post.getUser();
-
-      ReadUserDto readPostUserDto = new ReadUserDto(postUser.getUsername(), postUser.getNickname(), postUser.getBio());
-      ReadPostDto readPostDto = new ReadPostDto(post.getId(), post.getMessage(), post.getCreatedDate(),
-          post.getCreatedTime(),
-          readPostUserDto);
-
-      ReadComment readComment = new ReadComment(newComment.getMessage(), newComment.getCreatedDate(),
-          newComment.getCreatedTime(), readPostDto, readUserDto);
+      ReadComment readComment = new ReadComment(newComment.getId(), newComment.getMessage(),
+          newComment.getCreatedDate(),
+          newComment.getCreatedTime(), post.getId(), readUserDto);
 
       ResponseDto<ReadComment> res = new ResponseDto<ReadComment>("created comment sucessfully", 201, readComment);
 
@@ -67,6 +60,11 @@ public class CommentController {
     }
   }
 
+  /**
+   * Method that connect with service and get all comments in single post
+   * Post id @param id
+   * List of comments obj @return
+   */
   @GetMapping("/comments/post/{id}")
   public ResponseEntity<ResponseDto<List<ReadComment>>> readCommentsByPostId(@PathVariable Integer id) {
     try {
@@ -75,25 +73,17 @@ public class CommentController {
       List<ReadComment> readComments = comments.stream()
           .map(c -> {
             ReadUserDto readUserDto = new ReadUserDto(
+                c.getUser().getId(),
                 c.getUser().getUsername(),
                 c.getUser().getNickname(),
                 c.getUser().getBio());
 
-            ReadPostDto readPostDto = new ReadPostDto(
-                c.getPost().getId(),
-                c.getPost().getMessage(),
-                c.getPost().getCreatedDate(),
-                c.getPost().getCreatedTime(),
-                new ReadUserDto(
-                    c.getPost().getUser().getUsername(),
-                    c.getPost().getUser().getNickname(),
-                    c.getPost().getUser().getBio()));
-
             return new ReadComment(
+                c.getId(),
                 c.getMessage(),
                 c.getCreatedDate(),
                 c.getCreatedTime(),
-                readPostDto,
+                c.getPost().getId(),
                 readUserDto);
           })
           .collect(Collectors.toList());
