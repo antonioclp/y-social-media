@@ -155,6 +155,7 @@ export default function Profile() {
           usrPosts.map((p, index) => (
             <section key={index}>
               <CardFetchUsersPost
+                postId={p.postId}
                 user={p.user}
                 createdDate={p.createdDate}
                 createdTime={p.createdTime}

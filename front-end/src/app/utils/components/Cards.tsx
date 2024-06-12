@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 import moment from "moment";
 
 // Interfaces
-import { IPostsFetch } from "../interfaces";
+import { IGetPosts } from "../interfaces";
 import Image from "next/image";
 
 export const CardFetchPost = ({
@@ -38,17 +38,18 @@ export const CardFetchPost = ({
 };
 
 export const CardFetchUsersPost = ({
+  postId,
   message,
   createdDate,
   createdTime,
   user,
-}: IPostsFetch) => {
+}: IGetPosts) => {
   const formattedDate = moment(createdDate).format("YYYY MM DD");
   const createdDateTime = `${createdDate} ${createdTime}`;
   const relativeTime = moment(createdDateTime).fromNow();
 
   return (
-    <article className="section--2_artcl">
+    <article id={postId.toString()} className="section--2_artcl">
       <section>
         <span>{user.nickname}</span>
       </section>

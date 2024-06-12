@@ -12,6 +12,7 @@ import { CardFetchPost, CardFetchUsersPost } from "./utils/components/Cards";
 import {
   IErrors,
   IGenericResponse,
+  IGetPosts,
   IPostsFetch,
   IUser,
 } from "./utils/interfaces";
@@ -25,7 +26,7 @@ import { Navegation } from "./utils/components/Asides";
  * Front-end branch.
  */
 export default function Home() {
-  const [posts, setPosts] = useState<IPostsFetch[]>([]);
+  const [posts, setPosts] = useState<IGetPosts[]>([]);
   const [usrNickname, setUsrNickname] = useState<string>("");
   const [usrEmail, setUsrEmail] = useState<string>();
   const [postMsg, setPostMsg] = useState<string>("");
@@ -57,7 +58,7 @@ export default function Home() {
       const { data }: IGenericResponse = objs;
 
       if (Array.isArray(data)) {
-        const posts: IPostsFetch[] = data;
+        const posts: IGetPosts[] = data;
         const sortedPosts = posts.sort((postA, postB) => {
           const dateComparison = postB.createdDate.localeCompare(
             postA.createdDate
@@ -181,6 +182,7 @@ export default function Home() {
             return (
               <section key={index} className="hm-main-section--2">
                 <CardFetchUsersPost
+                  postId={p.postId}
                   message={p.message}
                   createdDate={p.createdDate}
                   createdTime={p.createdTime}

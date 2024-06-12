@@ -1,6 +1,7 @@
 import { Endpoints, FetchOption } from "../types";
 
 export interface IUser {
+  userId?: number;
   email?: string;
   password?: string;
   nickname?: string;
@@ -35,6 +36,14 @@ export interface IPostsFetch {
   user: IUser;
 }
 
+export interface IGetPosts {
+  postId: number;
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  user: IUser;
+}
+
 export interface IUpdate {
   email: string;
   password: string;
@@ -46,5 +55,5 @@ export interface IUpdate {
 export interface IGenericResponse {
   message: string;
   status: number;
-  data: IUser | IPostsFetch | null;
+  data: IUser | IPostsFetch | IGetPosts | null;
 }
