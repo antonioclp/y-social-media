@@ -2,15 +2,16 @@ import { ChangeEvent } from "react";
 import moment from "moment";
 
 // Interfaces
-import { IPostsFetch } from "../interfaces";
+import { IGetPosts } from "../interfaces";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export const CardFetchPost = ({
   onChange,
   onClick,
 }: {
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLImageElement>) => void;
 }) => {
   return (
     <article className="section--1_artcl">
@@ -38,17 +39,19 @@ export const CardFetchPost = ({
 };
 
 export const CardFetchUsersPost = ({
+  postId,
   message,
   createdDate,
   createdTime,
   user,
-}: IPostsFetch) => {
-  const formattedDate = moment(createdDate).format('YYYY MM DD');
+  onClick,
+}: IGetPosts & { onClick: (e: React.MouseEvent<HTMLImageElement>) => void }) => {
+  const formattedDate = moment(createdDate).format("YYYY MM DD");
   const createdDateTime = `${createdDate} ${createdTime}`;
   const relativeTime = moment(createdDateTime).fromNow();
 
   return (
-    <article className="section--2_artcl">
+    <article id={postId.toString()} className="section--2_artcl">
       <section>
         <span>{user.nickname}</span>
       </section>
@@ -57,6 +60,13 @@ export const CardFetchUsersPost = ({
       </section>
       <section className="section--2_artcl_time">
         <span>{formattedDate}</span>
+        <Image
+          src="/icons/comment-icon.png"
+          alt="comments"
+          width={20}
+          height={20}
+          onClick={onClick}
+        />
         <span>{relativeTime}</span>
       </section>
     </article>
