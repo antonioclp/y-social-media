@@ -24,6 +24,8 @@
 git clone git@github.com:antonioclp/y-social-media.git
 
 cd y-social-media
+
+git checkout branch/dev1.1
 ```
 
 #### Front-end
