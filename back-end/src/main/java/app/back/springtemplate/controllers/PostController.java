@@ -7,10 +7,8 @@ import app.back.springtemplate.models.entity.Post;
 import app.back.springtemplate.models.entity.User;
 import app.back.springtemplate.services.PostService;
 import app.back.springtemplate.services.UserService;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +41,9 @@ public class PostController {
       Post newPost = postService.createPost(post);
       User userByEmail = userService.readUser(newPost.getUser().getEmail(), newPost.getUser().getPassword());
 
-      ReadUserDto readUserDto = new ReadUserDto(userByEmail.getUsername(), userByEmail.getNickname(),
+      ReadUserDto readUserDto = new ReadUserDto(userByEmail.getId(), userByEmail.getUsername(), userByEmail.getNickname(),
           userByEmail.getBio());
-      ReadPostDto readPostDto = new ReadPostDto(newPost.getMessage(), newPost.getCreatedDate(),
+      ReadPostDto readPostDto = new ReadPostDto(newPost.getId(), newPost.getMessage(), newPost.getCreatedDate(),
           newPost.getCreatedTime(), readUserDto);
 
       ResponseDto<ReadPostDto> res = new ResponseDto<ReadPostDto>("created post sucessfully", 201, readPostDto);
@@ -67,8 +65,8 @@ public class PostController {
     try {
       List<Post> posts = postService.readAllPosts();
       List<ReadPostDto> readPostsDto = posts.stream()
-          .map(p -> new ReadPostDto(p.getMessage(), p.getCreatedDate(), p.getCreatedTime(),
-              new ReadUserDto(p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
+          .map(p -> new ReadPostDto(p.getId(), p.getMessage(), p.getCreatedDate(), p.getCreatedTime(),
+              new ReadUserDto(p.getId(), p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
           .collect(Collectors.toList());
 
       ResponseDto<List<ReadPostDto>> res = new ResponseDto<List<ReadPostDto>>("success", 200, readPostsDto);
@@ -90,8 +88,8 @@ public class PostController {
     try {
       List<Post> postsByUserNickname = postService.readPostsByUserNickname(nickname);
       List<ReadPostDto> readPostsDto = postsByUserNickname.stream()
-          .map(p -> new ReadPostDto(p.getMessage(), p.getCreatedDate(), p.getCreatedTime(),
-              new ReadUserDto(p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
+          .map(p -> new ReadPostDto(p.getId(), p.getMessage(), p.getCreatedDate(), p.getCreatedTime(),
+              new ReadUserDto(p.getId(), p.getUser().getUsername(), p.getUser().getNickname(), p.getUser().getBio())))
           .collect(Collectors.toList());
 
       ResponseDto<List<ReadPostDto>> res = new ResponseDto<List<ReadPostDto>>("sucess", 200, readPostsDto);

@@ -1,19 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Image from "next/image";
 import Cookies from "js-cookie";
 
 // Interfaces
 import {
   IGenericResponse,
-  IPostsFetch,
+  IGetPosts,
   IUpdate,
   IUser,
 } from "@/app/utils/interfaces";
+
+// Utils
 import { genericFetch, updateFetch } from "@/app/utils/api";
+
+// Components
 import { CardFetchUsersPost } from "@/app/utils/components/Cards";
+
+// Styles
+import "@/styles/pages/profile.css";
 
 export default function Profile() {
   const [usrObj, setUsrObj] = useState<IUser>({
@@ -23,9 +30,11 @@ export default function Profile() {
     username: "",
     bio: "",
   });
-  const [usrPosts, setUsrPosts] = useState<IPostsFetch[]>([]);
+  const [usrPosts, setUsrPosts] = useState<IGetPosts[]>([]);
   const [editBioEnable, setEditBioEnable] = useState<boolean>(false);
   const [strBio, setStrBio] = useState<string>("");
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -51,6 +60,7 @@ export default function Profile() {
             method: "GET",
             option: "read-user-posts",
           },
+          null,
           null,
           obj.nickname
         );
@@ -80,9 +90,9 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
-  const handleClick = async (e: React.MouseEvent<HTMLImageElement>) => {
+  const onClick = async (e: React.MouseEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
-    const { id } = target;
+    const { id, alt } = target;
 
     if (id === "edit-bio") {
       setEditBioEnable(true);
@@ -114,9 +124,19 @@ export default function Profile() {
         setEditBioEnable(false);
       }
     }
+
+    if (alt === "comments") {
+      const artcl = target.closest("article");
+
+      if (!artcl) {
+        return;
+      }
+
+      router.push(`/post/${artcl.id}`);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const target = e.target;
     const { name, value } = target;
 
@@ -126,19 +146,19 @@ export default function Profile() {
   };
 
   return (
-    <main>
-      <section>
+    <main className="profile-m">
+      <section className="profile-m--header">
         <span>{usrObj.nickname}</span>
         <span>{usrObj.username}</span>
         {editBioEnable ? (
-          <section>
+          <section className="profile-m--header-edit">
             <textarea
               placeholder="Insert your bio."
               maxLength={250}
               rows={2}
               cols={20}
               name="textarea-bio"
-              onChange={handleChange}
+              onChange={onChange}
               value={strBio}
             ></textarea>
             <Image
@@ -148,7 +168,7 @@ export default function Profile() {
               height={20}
               priority
               id="confirm-edit"
-              onClick={handleClick}
+              onClick={onClick}
             />
           </section>
         ) : (
@@ -161,18 +181,20 @@ export default function Profile() {
           height={20}
           priority
           id="edit-bio"
-          onClick={handleClick}
+          onClick={onClick}
         />
       </section>
-      <section>
+      <section className="profile-m--posts">
         {usrPosts.length > 0 ? (
           usrPosts.map((p, index) => (
-            <section key={index}>
+            <section key={index} className="profile-m--posts-item">
               <CardFetchUsersPost
+                postId={p.postId}
                 user={p.user}
                 createdDate={p.createdDate}
                 createdTime={p.createdTime}
                 message={p.message}
+                onClick={onClick}
               />
             </section>
           ))
