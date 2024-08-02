@@ -12,8 +12,15 @@ import {
   IUpdate,
   IUser,
 } from "@/app/utils/interfaces";
+
+// Utils
 import { genericFetch, updateFetch } from "@/app/utils/api";
+
+// Components
 import { CardFetchUsersPost } from "@/app/utils/components/Cards";
+
+// Styles
+import "@/styles/pages/profile.css"
 
 export default function Profile() {
   const [usrObj, setUsrObj] = useState<IUser>({
@@ -124,12 +131,12 @@ export default function Profile() {
   };
 
   return (
-    <main>
-      <section>
+    <main className="profile-m">
+      <section className="profile-m--header">
         <span>{usrObj.nickname}</span>
         <span>{usrObj.username}</span>
         {editBioEnable ? (
-          <section>
+          <section className="profile-m--header-edit">
             <textarea
               placeholder="Insert your bio."
               maxLength={250}
@@ -162,10 +169,10 @@ export default function Profile() {
           onClick={onClick}
         />
       </section>
-      <section>
+      <section className="profile-m--posts">
         {usrPosts.length > 0 ? (
           usrPosts.map((p, index) => (
-            <section key={index}>
+            <section key={index} className="profile-m--posts-item">
               <CardFetchUsersPost
                 postId={p.postId}
                 user={p.user}

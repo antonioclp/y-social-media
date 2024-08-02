@@ -1,9 +1,12 @@
+import Image from "next/image";
 import { ChangeEvent } from "react";
 import moment from "moment";
 
 // Interfaces
 import { IGetPosts } from "../interfaces";
-import Image from "next/image";
+
+// Styles
+import "@/styles/components/cards.css";
 
 export const CardFetchPost = ({
   onChange,
@@ -44,7 +47,9 @@ export const CardFetchUsersPost = ({
   createdTime,
   user,
   onClick,
-}: IGetPosts & { onClick: (e: React.MouseEvent<HTMLImageElement>) => void }) => {
+}: IGetPosts & {
+  onClick: (e: React.MouseEvent<HTMLImageElement>) => void;
+}) => {
   const formattedDate = moment(createdDate).format("YYYY MM DD");
   const createdDateTime = `${createdDate} ${createdTime}`;
   const relativeTime = moment(createdDateTime).fromNow();
