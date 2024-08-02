@@ -1,61 +1,42 @@
 .hm-main {
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 100%;
 }
 
 .hm-main-section--1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 60%;
-  padding: 40px;
-  border-bottom: 1px solid #dcdcdc;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.section--1_artcl {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.section--1_artcl section {
-  margin: 15px;
-}
-
-textarea {
-  outline: none;
-  border: 1px solid #ced4da;
-  width: 100%;
-  height: 100px;
-  padding: 12px;
-  border-radius: 6px;
-  resize: none;
-  overflow: hidden;
-  background-color: #f8f9fa;
-  color: #495057;
-  font-size: 14px;
-}
-
-textarea::placeholder {
-  color: #adb5bd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .hm-main-section--2 {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 60%;
-  padding: 20px;
-  border: 1px solid #dcdcdc;
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 20px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.hm-main-section--1 span {
+  display: block;
+  margin-top: 10px;
+  color: #ff0000;
+  font-size: 16px;
+}
+
+.hm-main-section--1 span:last-child {
+  color: #333333;
+}
+
+.hm-main-section--1 .card-fetch-post,
+.hm-main-section--2 .card-fetch-users-post {
+  margin-bottom: 20px;
 }

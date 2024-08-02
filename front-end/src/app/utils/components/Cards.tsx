@@ -7,6 +7,7 @@ import { IGetPosts } from "../interfaces";
 
 // Styles
 import "@/styles/components/cards.css";
+import "@/styles/components/comment.css";
 
 export const CardFetchPost = ({
   onChange,
@@ -18,15 +19,17 @@ export const CardFetchPost = ({
   isComment: boolean;
 }) => {
   return (
-    <article className="section--1_artcl">
+    <article className={isComment ? "section--1_artcl" : "comment-mode"}>
       <section>
         <textarea
-          placeholder={isComment ? "Post your comment." : "What's your thinking?"}
+          placeholder={
+            isComment ? "Post your comment." : "What's your thinking?"
+          }
           maxLength={250}
           onChange={onChange}
           rows={2}
           cols={20}
-          style={{ width: "600px", boxSizing: "border-box" }}
+          className={isComment ? "section--1_artcl" : "comment-mode"}
         />
       </section>
       <section>

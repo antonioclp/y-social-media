@@ -20,7 +20,7 @@ import {
 import { genericFetch } from "@/app/utils/api";
 
 // Styles
-import "@/styles/pages/postid.css";
+import "@/styles/pages/post.css";
 
 export default function Post() {
   const [postComments, setPostComments] = useState<IGetComments[]>([]);
