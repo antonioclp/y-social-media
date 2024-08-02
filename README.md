@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./front-end/public/icons/y-logo.png" width="200">
+  <img src="./front-end/public/icons/y-purple.webp" width="200">
 </p>
 
 <h3 align="center">Y Social Media</h3>
@@ -11,9 +11,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
-
-> [!WARNING]\
-> Project in development.
 
 > [!NOTE]\
 > Project that acts as a social media.
@@ -62,6 +59,14 @@ npm run back
 | **GET: /posts**            | get all posts                          |
 | **GET: /posts/{nickname}** | get posts by user nickname             |
 
+### Comments route
+
+| Route                      | Usage                                  |
+| -------------------------- | -------------------------------------- |
+| **POST: /create/comment**     | @RequestBody create a new coment by user |
+| **GET: /comments/post/{id}**            | get all comments in post by id                          |
+
+
 ---
 
 ### Types
@@ -77,8 +82,18 @@ utils/
 **`types/`**
 
 ```ts
-export type FetchOption = "create-post" | "read-user-posts" | "read-all-posts";
-export type Endpoints = "create/post" | `posts/${string}` | "posts";
+export type FetchOption =
+  | "create-post"
+  | "read-user-posts"
+  | "read-all-posts"
+  | "read-comments-by-post"
+  | "create-comment"
+export type Endpoints =
+  | "create/post"
+  | `posts/${string}`
+  | "posts"
+  | `comments/post/${string}`
+  | `create/comment`;
 ```
 
 **`interfaces/`**
@@ -87,6 +102,7 @@ export type Endpoints = "create/post" | `posts/${string}` | "posts";
 import { Endpoints, FetchOption } from "../types";
 
 export interface IUser {
+  userId?: number;
   email?: string;
   password?: string;
   nickname?: string;
@@ -121,6 +137,14 @@ export interface IPostsFetch {
   user: IUser;
 }
 
+export interface IGetPosts {
+  postId: number;
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  user: IUser;
+}
+
 export interface IUpdate {
   email: string;
   password: string;
@@ -129,9 +153,31 @@ export interface IUpdate {
   bio?: string;
 }
 
+export interface IGetComments {
+  commentId: number;
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  postId: number;
+  user: IUser;
+}
+
 export interface IGenericResponse {
   message: string;
   status: number;
-  data: IUser | IPostsFetch | null;
+  data: IUser | IPostsFetch | IGetPosts | IGetComments | null;
 }
+
+export interface IComment {
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  user: {
+    userId: number;
+  };
+  post: {
+    postId: number;
+  };
+}
+
 ```
