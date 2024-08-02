@@ -188,7 +188,11 @@ export default function Home() {
     <main className="hm-main">
       <section className="hm-main-section--1">
         <Navegation nickname={usrNickname} />
-        <CardFetchPost onChange={onChange} onClick={onClick} />
+        <CardFetchPost
+          onChange={onChange}
+          onClick={onClick}
+          isComment={false}
+        />
         {errorsMsg.activate ? (
           <span>{errorsMsg.message}</span>
         ) : (

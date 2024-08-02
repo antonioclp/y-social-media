@@ -1,21 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
 import Cookies from "js-cookie";
+import moment from "moment";
 
 // Components
 import { CardFetchPost } from "@/app/utils/components/Cards";
 
 // Interfaces
-import { IGenericResponse, IGetComments } from "@/app/utils/interfaces";
+import {
+  IComment,
+  IErrors,
+  IGenericResponse,
+  IGetComments,
+} from "@/app/utils/interfaces";
 
 // Api
 import { genericFetch } from "@/app/utils/api";
 
 export default function Post() {
   const [postComments, setPostComments] = useState<IGetComments[]>([]);
-  const id = usePathname().split("/").pop();
+  const [commentMsg, setCommentMsg] = useState<string>("");
+  const [errorsMsg, setErrorsMsg] = useState<IErrors>({
+    activate: false,
+    message: "",
+  });
+  const urlPostId = usePathname().split("/").pop();
 
   useEffect(() => {
     try {
@@ -27,7 +38,7 @@ export default function Post() {
         const obj: IGenericResponse = await genericFetch({
           option: "read-comments-by-post",
           method: "GET",
-          endpoint: `comments/post/${id}`,
+          endpoint: `comments/post/${urlPostId}`,
         });
 
         const { data }: IGenericResponse = obj;
@@ -53,23 +64,128 @@ export default function Post() {
     } catch (err) {
       console.error(err);
     }
-  }, [id]);
+  }, [urlPostId]);
 
-  const onChange = async () => {
-    
-  }
+  const onChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+
+    if (value.trim().length >= 250) {
+      setErrorsMsg({
+        activate: true,
+        message: "max characters exceeded",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    setCommentMsg(value);
+  };
+
+  const onClick = async (e: React.MouseEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    const { id } = target;
+
+    if (id !== "handle-comment") return;
+
+    const user = Cookies.get("dXNy");
+
+    if (!user) return;
+    const userParse = JSON.parse(user);
+
+    if (commentMsg.trim().length < 2) {
+      setErrorsMsg({
+        activate: true,
+        message: "min characteres allowed is 2",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 1000);
+
+      return;
+    }
+
+    console.log(userParse.userId);
+
+    const commentInfo: IComment = {
+      message: commentMsg,
+      createdDate: moment().format("YYYY-MM-DD"),
+      createdTime: moment().format("HH:mm:ss"),
+      user: {
+        userId: userParse.userId,
+      },
+      post: {
+        postId: Number(urlPostId),
+      },
+    };
+
+    const obj = await genericFetch(
+      { option: "create-comment", endpoint: "create/comment", method: "POST" },
+      null,
+      commentInfo
+    );
+
+    console.log(obj);
+
+    if (!obj) {
+      setErrorsMsg({
+        activate: true,
+        message: "Oops, there was a problem submitting your post",
+      });
+
+      setTimeout(() => {
+        setErrorsMsg({
+          activate: false,
+          message: "",
+        });
+      }, 3000);
+
+      return;
+    }
+
+    setErrorsMsg({
+      activate: true,
+      message: "Post sent successfully",
+    });
+
+    setTimeout(() => {
+      setErrorsMsg({
+        activate: false,
+        message: "",
+      });
+    }, 3000);
+
+    location.reload();
+  };
 
   return (
     <main>
       <section>
-        <CardFetchPost />
+        <CardFetchPost onChange={onChange} onClick={onClick} isComment={true} />
+        {errorsMsg.activate ? (
+          <span>{errorsMsg.message}</span>
+        ) : (
+          <span>Send your message</span>
+        )}
       </section>
       <section>
-        {postComments.length > 0
-          ? postComments.map((c) => {
-              return <section key={c.commentId}>{c.message}</section>;
-            })
-          : <span>No comments available</span>}
+        {postComments.length > 0 ? (
+          postComments.map((c) => {
+            return <section key={c.commentId}>{c.message}</section>;
+          })
+        ) : (
+          <span>No comments available</span>
+        )}
       </section>
     </main>
   );

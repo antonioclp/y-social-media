@@ -11,15 +11,17 @@ import "@/styles/components/cards.css";
 export const CardFetchPost = ({
   onChange,
   onClick,
+  isComment,
 }: {
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onClick: (e: React.MouseEvent<HTMLImageElement>) => void;
+  isComment: boolean;
 }) => {
   return (
     <article className="section--1_artcl">
       <section>
         <textarea
-          placeholder="What's you thinking?"
+          placeholder={isComment ? "Post your comment." : "What's your thinking?"}
           maxLength={250}
           onChange={onChange}
           rows={2}
@@ -33,6 +35,7 @@ export const CardFetchPost = ({
           alt="send-message"
           height={20}
           width={20}
+          id={isComment ? "handle-comment" : ""}
           onClick={onClick}
         />
       </section>
