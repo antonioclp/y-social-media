@@ -19,6 +19,9 @@ import {
 // Api
 import { genericFetch } from "@/app/utils/api";
 
+// Styles
+import "@/styles/pages/postid.css";
+
 export default function Post() {
   const [postComments, setPostComments] = useState<IGetComments[]>([]);
   const [commentMsg, setCommentMsg] = useState<string>("");
@@ -169,22 +172,27 @@ export default function Post() {
   };
 
   return (
-    <main>
-      <section>
+    <main className="comments_main">
+      <section className="comments_section">
         <CardFetchPost onChange={onChange} onClick={onClick} isComment={true} />
         {errorsMsg.activate ? (
-          <span>{errorsMsg.message}</span>
+          <span className="comments_error">{errorsMsg.message}</span>
         ) : (
-          <span>Send your message</span>
+          <span className="comments_prompt">Send your message</span>
         )}
       </section>
-      <section>
+      <section className="comments_list">
         {postComments.length > 0 ? (
           postComments.map((c) => {
-            return <section key={c.commentId}>{c.message}</section>;
+            return (
+              <section key={c.commentId} className="comment_item">
+                <span>{c.user.nickname}</span>
+                {c.message}
+              </section>
+            );
           })
         ) : (
-          <span>No comments available</span>
+          <span className="comments_empty">No comments available</span>
         )}
       </section>
     </main>
