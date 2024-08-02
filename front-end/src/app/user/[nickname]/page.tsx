@@ -20,7 +20,7 @@ import { genericFetch, updateFetch } from "@/app/utils/api";
 import { CardFetchUsersPost } from "@/app/utils/components/Cards";
 
 // Styles
-import "@/styles/pages/profile.css"
+import "@/styles/pages/profile.css";
 
 export default function Profile() {
   const [usrObj, setUsrObj] = useState<IUser>({
@@ -60,6 +60,7 @@ export default function Profile() {
             method: "GET",
             option: "read-user-posts",
           },
+          null,
           null,
           obj.nickname
         );

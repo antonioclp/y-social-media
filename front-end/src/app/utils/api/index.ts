@@ -136,7 +136,7 @@ export const updateFetch = async (
 export const genericFetch = async (
   fetchObj: IGenericFetch,
   postObj?: IPostsFetch | null,
-  commentObj?: IComment,
+  commentObj?: IComment | null,
   nickname?: string
 ): Promise<IGenericResponse> => {
   let status: number = 0;
