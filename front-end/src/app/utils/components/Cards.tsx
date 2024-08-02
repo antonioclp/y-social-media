@@ -4,7 +4,6 @@ import moment from "moment";
 // Interfaces
 import { IGetPosts } from "../interfaces";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 
 export const CardFetchPost = ({
   onChange,
@@ -22,7 +21,7 @@ export const CardFetchPost = ({
           onChange={onChange}
           rows={2}
           cols={20}
-          style={{ width: "100%", boxSizing: "border-box" }}
+          style={{ width: "600px", boxSizing: "border-box" }}
         />
       </section>
       <section>
