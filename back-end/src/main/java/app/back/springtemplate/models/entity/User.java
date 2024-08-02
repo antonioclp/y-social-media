@@ -18,28 +18,31 @@ import jakarta.persistence.Table;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Integer id;
+  private Integer id;
 
   @Column(name = "nickname", unique = true, nullable = false)
-  String nickname;
+  private String nickname;
 
   @Column(name = "username", nullable = false)
-  String username;
+  private String username;
 
   @Column(name = "email", unique = true, nullable = false)
-  String email;
+  private String email;
 
   @Column(name = "password", nullable = false)
-  String password;
+  private String password;
 
   @Column(name = "age", nullable = false)
-  int age;
+  private int age;
 
   @Column(name = "bio")
-  String bio;
+  private String bio;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  List<Post> posts;
+  private List<Post> posts;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  private List<Comment> comments;
 
   public User() {
   }
