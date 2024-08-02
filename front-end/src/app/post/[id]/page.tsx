@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { redirect, usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 
+// Components
+import { CardFetchPost } from "@/app/utils/components/Cards";
+
 // Interfaces
 import { IGenericResponse, IGetComments } from "@/app/utils/interfaces";
 
@@ -52,14 +55,21 @@ export default function Post() {
     }
   }, [id]);
 
+  const onChange = async () => {
+    
+  }
+
   return (
     <main>
+      <section>
+        <CardFetchPost />
+      </section>
       <section>
         {postComments.length > 0
           ? postComments.map((c) => {
               return <section key={c.commentId}>{c.message}</section>;
             })
-          : null}
+          : <span>No comments available</span>}
       </section>
     </main>
   );

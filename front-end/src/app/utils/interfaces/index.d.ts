@@ -66,3 +66,15 @@ export interface IGenericResponse {
   status: number;
   data: IUser | IPostsFetch | IGetPosts | IGetComments | null;
 }
+
+export interface IComment {
+  message: string;
+  createdDate: string;
+  createdTime: string;
+  user: {
+    userId: number;
+  };
+  post: {
+    postId: number;
+  };
+}

@@ -1,4 +1,5 @@
 import {
+  IComment,
   IGenericFetch,
   IGenericResponse,
   IPostsFetch,
@@ -135,6 +136,7 @@ export const updateFetch = async (
 export const genericFetch = async (
   fetchObj: IGenericFetch,
   postObj?: IPostsFetch | null,
+  commentObj?: IComment,
   nickname?: string
 ): Promise<IGenericResponse> => {
   let status: number = 0;
@@ -213,6 +215,44 @@ export const genericFetch = async (
       const response = await fetch(url, {
         method,
         cache: "no-cache",
+      });
+
+      const obj: IGenericResponse = await response.json();
+
+      if (obj.status !== 200) {
+        status = obj.status;
+        throw new Error(obj.message);
+      }
+
+      return obj;
+    }
+
+    if (option === "create-comment" && commentObj) {
+      const {
+        message,
+        createdDate,
+        createdTime,
+        user: { userId },
+        post: { postId },
+      } = commentObj;
+
+      const response = await fetch(url, {
+        method,
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          createdDate,
+          createdTime,
+          user: {
+            id: userId,
+          },
+          post: {
+            id: postId,
+          },
+        }),
       });
 
       const obj: IGenericResponse = await response.json();
